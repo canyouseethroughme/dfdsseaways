@@ -7,14 +7,19 @@ import { buildSchema } from 'type-graphql'
 
 import { HelloResolver } from './resolvers/hello'
 // import { User } from './entities/User'
+// import { Booking } from './entities/Booking'
 
 const main = async () => {
     const orm = await MikroORM.init(mikroConfig)
     await orm.getMigrator().up()
     
-    // const user = orm.em.create(User, {first_name: 'Andrei', last_name: 'Stefan'})
-    // await orm.em.persistAndFlush(user)
-    // const users = await orm.em.find(User, {})
+    // const user1 = orm.em.create(User, {first_name: 'John', last_name: 'Doe'})
+    // const user2 = orm.em.create(User, {first_name: 'Mathias', last_name: 'Jan'})
+    // const booking1 = orm.em.create(Booking, {user_id: 20, start_date: "2021-02-10", end_date: "2021-02-15"})
+    // await orm.em.persistAndFlush(booking1)
+    // await orm.em.persistAndFlush([user1, user2])
+    // await orm.em.persistAndFlush(user2)
+    // const users = await orm.em.find(Booking, {})
     // console.log(users)
     
     const app = express()

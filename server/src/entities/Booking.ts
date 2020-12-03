@@ -1,17 +1,21 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Reservation } from "./Reservation";
+import { User } from "./User";
 
 @Entity()
 export class Booking {
-
     @PrimaryKey()
     id!: number;
-  
+    
     @Property()
-    user_id!: number;
-  
+    start_date: string;
+    
     @Property()
-    start_date = new Date();
-  
-    @Property()
-    end_date = new Date();
+    end_date: string;
+    
+    @OneToMany(() => Reservation, reservation => reservation.booking_id)
+    reservations = new Collection<Reservation>(this)
+
+    @ManyToOne(() => User)
+    user_id!: User
 }

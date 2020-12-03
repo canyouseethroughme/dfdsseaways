@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { OrderItem } from "./OrderItem";
 
 type type = {
     starter: boolean;
@@ -15,7 +16,6 @@ type item_type = {
 
 @Entity()
 export class MenuItem {
-
   @PrimaryKey()
   id!: number;
 
@@ -31,4 +31,6 @@ export class MenuItem {
   @Property()
   item_type!: item_type;
 
+  @ManyToOne(() => OrderItem)
+  menu_item_id!: OrderItem;
 }

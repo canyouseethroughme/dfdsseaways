@@ -1,4 +1,5 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Booking } from "./Booking";
 
 @Entity()
 export class User {
@@ -11,4 +12,7 @@ export class User {
 
   @Property()
   last_name!: string;
+
+  @OneToMany(() => Booking, booking => booking.user_id)
+  bookings = new Collection<Booking>(this);
 }
