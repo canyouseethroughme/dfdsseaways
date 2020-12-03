@@ -1,18 +1,19 @@
-import { Entity, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, Property } from "@mikro-orm/core";
+import { MenuItem } from "./MenuItem";
+import { Order } from "./Order";
 
 @Entity()
 export class OrderItem {
 
   @Property()
-  order_id!: number;
-
-  @Property()
-  menu_item_id!: number;
-
-  @Property()
   price!: number;
-
+  
   @Property()
   amount!: number;
 
+  @ManyToOne({primary: true})
+  order: Order
+
+  @ManyToOne({ primary: true })
+  menu_item: MenuItem
 }

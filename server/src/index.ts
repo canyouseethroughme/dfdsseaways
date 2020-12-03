@@ -1,22 +1,31 @@
 import { MikroORM } from '@mikro-orm/core'
-import { __prod__ } from './constants'
-import mikroConfig from './mikro-orm.config'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
 
+import mikroConfig from './mikro-orm.config'
 import { HelloResolver } from './resolvers/hello'
-// import { User } from './entities/User'
+import { __prod__ } from './constants'
+
+//// IMPORTS FOR SEEDS
+// import { userSeeds } from './seeds/user.seeds'
+// import { tableSeeds } from './seeds/table.seeds'
+// import { menuItemSeeds } from './seeds/menuItem.seeds'
+import { bookingSeeds } from './seeds/booking.seeds'
+/////////////////////////////////////
 
 const main = async () => {
     const orm = await MikroORM.init(mikroConfig)
     await orm.getMigrator().up()
     
-    // const user = orm.em.create(User, {first_name: 'Andrei', last_name: 'Stefan'})
-    // await orm.em.persistAndFlush(user)
-    // const users = await orm.em.find(User, {})
-    // console.log(users)
-    
+    ///////////////////////
+    // SEEDS
+    // await userSeeds(orm)
+    // await tableSeeds(orm)
+    // await menuItemSeeds(orm)
+    await bookingSeeds(orm)
+    ///////////////////////
+   
     const app = express()
 
     const apolloServer = new ApolloServer({
