@@ -4,6 +4,7 @@ import { User } from "./User";
 
 @Entity()
 export class Booking {
+
     @PrimaryKey()
     id!: number;
     
@@ -13,9 +14,9 @@ export class Booking {
     @Property()
     end_date: string;
     
-    @OneToMany(() => Reservation, reservation => reservation.booking_id)
-    reservations = new Collection<Reservation>(this)
-
     @ManyToOne(() => User)
-    user_id!: User
+    user: User
+    
+    @OneToMany(() => Reservation, reservation => reservation.booking)
+    reservations = new Collection<Reservation>(this)
 }

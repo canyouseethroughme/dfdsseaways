@@ -1,20 +1,15 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { Reservation } from "./Reservation";
 
-type max_persons = {
-    small_table: number; // 2 people
-    medium_table: number; // 4 people
-    large_table: number; // 8 people
-}
-
 @Entity()
 export class Table {
+  
   @PrimaryKey()
-  id!: number;
+  _id!: number;
 
   @Property()
-  max_persons!: max_persons;
+  max_persons!: 2|4|8; // 2: small_table | 4: medium_table | 8: large_table
 
-  @OneToMany(() => Reservation, reservation => reservation.table_id)
+  @OneToMany(() => Reservation, reservation => reservation.table)
   reservations = new Collection<Reservation>(this)
 }

@@ -3,9 +3,9 @@ import { Booking } from "./Booking";
 
 @Entity()
 export class User {
-
+  
   @PrimaryKey()
-  id!: number;
+  id: number;
 
   @Property()
   first_name!: string
@@ -13,6 +13,6 @@ export class User {
   @Property()
   last_name!: string;
 
-  @OneToMany(() => Booking, booking => booking.user_id)
+  @OneToMany(() => Booking, booking => booking.user)
   bookings = new Collection<Booking>(this);
 }
