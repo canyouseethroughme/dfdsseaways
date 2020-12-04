@@ -5,11 +5,11 @@ import { Reservation } from "./Reservation";
 export class Table {
   
   @PrimaryKey()
-  _id!: number;
+  id!: number;
 
   @Property()
-  max_persons!: 2|4|8; // 2: small_table | 4: medium_table | 8: large_table
+  max_persons!: 2 | 4 | 8; // 2: small_table | 4: medium_table | 8: large_table
 
-  @OneToMany(() => Reservation, reservation => reservation.table)
+  @OneToMany(() => Reservation, Reservation => Reservation.table)
   reservations = new Collection<Reservation>(this)
 }

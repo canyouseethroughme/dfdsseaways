@@ -9,8 +9,11 @@ export class Order {
   id!: number;
   
   @Property()
-  menu_item!: number;
+  menu_item_id!: number;
+
+  @Property()
+  reservation_table_id!: number;
   
-  @ManyToOne(() => Reservation)
+  @ManyToOne(() => Reservation, {primary: true})
   reservation!: Reservation
 }

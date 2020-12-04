@@ -8,9 +8,9 @@ import { HelloResolver } from './resolvers/hello'
 import { __prod__ } from './constants'
 
 //// IMPORTS FOR SEEDS
-// import { userSeeds } from './seeds/user.seeds'
-// import { tableSeeds } from './seeds/table.seeds'
-// import { menuItemSeeds } from './seeds/menuItem.seeds'
+import { userSeeds } from './seeds/user.seeds'
+import { tableSeeds } from './seeds/table.seeds'
+import { menuItemSeeds } from './seeds/menuItem.seeds'
 import { bookingSeeds } from './seeds/booking.seeds'
 /////////////////////////////////////
 
@@ -20,9 +20,9 @@ const main = async () => {
     
     ///////////////////////
     // SEEDS
-    // await userSeeds(orm)
-    // await tableSeeds(orm)
-    // await menuItemSeeds(orm)
+    await userSeeds(orm)
+    await tableSeeds(orm)
+    await menuItemSeeds(orm)
     await bookingSeeds(orm)
     ///////////////////////
    

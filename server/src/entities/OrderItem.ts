@@ -11,6 +11,15 @@ export class OrderItem {
   @Property()
   amount!: number;
 
+  @Property()
+  order_reservation_booking_id!: number;
+
+  @Property()
+  order_reservation_booking_user_id!: number;
+
+  @Property()
+  order_reservation_table_id!: number;
+
   @ManyToOne({primary: true})
   order: Order
 

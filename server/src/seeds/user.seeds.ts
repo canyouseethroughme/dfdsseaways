@@ -10,5 +10,5 @@ export const userSeeds = async (orm: MikroORM) => {
     const user5 = seed(orm, User, {first_name: 'Steven', last_name: 'Segal'})
     await persist(orm, [user1, user2, user3, user4, user5])
     const users = await orm.em.find(User, {})
-    console.log('users:', users)
+    console.log('users: ', users)
 }
