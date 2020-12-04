@@ -1,4 +1,4 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, DateType, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
 import { Reservation } from "./Reservation";
 import { User } from "./User";
 
@@ -8,14 +8,14 @@ export class Booking {
     @PrimaryKey()
     id!: number;
     
-    @Property()
-    start_date: string;
+    @Property({type: DateType})
+    start_date: Date;
     
-    @Property()
-    end_date: string;
+    @Property({type: DateType})
+    end_date: Date;
     
-    @ManyToOne(() => User)
-    user: User
+    @ManyToOne(() => User, { primary: true })
+    user!: User
     
     @OneToMany(() => Reservation, reservation => reservation.booking)
     reservations = new Collection<Reservation>(this)

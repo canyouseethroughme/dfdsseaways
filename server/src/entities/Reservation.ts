@@ -15,11 +15,11 @@ export class Reservation {
   @Property()
   no_persons!: number;
 
-  @ManyToOne(() => Booking)
-  booking!: Booking
+  @ManyToOne(() => Booking, {primary: true})
+  booking: Booking
   
-  @ManyToOne(() => Table)
-  table!: Table;
+  @ManyToOne(() => Table, {primary: true})
+  table: Table;
   
   @OneToMany(() => Order, order => order.reservation)
   orders = new Collection<Order>(this)
