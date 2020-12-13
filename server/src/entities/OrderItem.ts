@@ -1,37 +1,28 @@
-import { Entity, ManyToOne, Property } from "@mikro-orm/core";
 import { Field, Int, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryColumn } from "typeorm";
 import { MenuItem } from "./MenuItem";
 import { Order } from "./Order";
-
 @ObjectType()
 @Entity()
-export class OrderItem {
+export class OrderItem extends BaseEntity {
+
+  @PrimaryColumn()
+  orderId: number;
+
+  @PrimaryColumn()
+  menuItemId: number
 
   @Field(() => Int)
-  @Property()
-  price!: number;
+  @Column()
+  price: number;
   
   @Field(() => Int)
-  @Property()
-  amount!: number;
+  @Column()
+  amount: number;
 
-  @Field(() => Int)
-  @Property()
-  order_reservation_booking_id!: number;
-
-  @Field(() => Int)
-  @Property()
-  order_reservation_booking_user_id!: number;
-
-  @Field(() => Int)
-  @Property()
-  order_reservation_table_id!: number;
-
-  @Field(() => [Order])
-  @ManyToOne({primary: true})
+  @ManyToOne(() => Order, order => order.id)
   order: Order
 
-  @Field(() => [MenuItem])
-  @ManyToOne({ primary: true })
-  menu_item: MenuItem
+  @ManyToOne(() => MenuItem, menuItem => menuItem.id)
+  menuItem: MenuItem
 }

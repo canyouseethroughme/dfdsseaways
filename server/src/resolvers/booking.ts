@@ -1,11 +1,15 @@
 import { Booking } from "../entities/Booking";
-import { MyContext } from "../types";
-import { Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class BookingResolver {
     @Query(() => [Booking])
-    bookings(@Ctx() { em }: MyContext): Promise<Booking[]> {
-        return em.find(Booking, {})
+    async bookings(): Promise<Booking[]> {
+       return Booking.find()
+    }
+
+    @Query(() => Booking, {nullable: true})
+    booking(@Arg("id") id: number): Promise<Booking | undefined>{
+        return Booking.findOne(id)
     }
 }

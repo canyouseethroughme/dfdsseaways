@@ -1,11 +1,15 @@
 import { User } from "../entities/User";
-import { MyContext } from "../types";
-import { Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class UserResolver {
     @Query(() => [User])
-    users(@Ctx() { em }: MyContext): Promise<User[]> {
-        return em.find(User, {})
+    async users(): Promise<User[]> {
+        return User.find()
+    }
+
+    @Query(() => User, {nullable: true})
+    user(@Arg('id') id: number): Promise<User | undefined>{
+        return User.findOne(id)
     }
 }

@@ -1,34 +1,40 @@
-import { Cascade, Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+
 import { Field, Int, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Booking } from "./Booking";
 import { Order } from "./Order";
-import { Table } from "./Table";
+import { Table } from './Table'
 
 @ObjectType()
 @Entity()
-export class Reservation {
+export class Reservation extends BaseEntity {
   
-  @Field(() => Int)
-  @PrimaryKey()
+  @Field()
+  @PrimaryGeneratedColumn()
   id!: number;
   
   @Field(() => String)
-  @Property()
-  date_and_time = new Date();
-  
-  @Field(() => Int)
-  @Property()
-  no_persons!: number;
+  @Column({type: 'date'})
+  dateAndTime: Date;
 
-  @Field(() => [Booking])
-  @ManyToOne(() => Booking, {primary: true})
+  @Field(() => Int)
+  @Column({type: 'int'})
+  noPersons: number;
+
+  @Field()
+  @Column()
+  bookingId: number
+
+  @Field()
+  @Column()
+  tableId: number
+
+  @ManyToOne(() => Booking, booking => booking.reservations)
   booking: Booking
-  
-  @Field(() => [Table])
-  @ManyToOne(() => Table, {primary: true})
-  table: Table;
-  
-  @Field(() => [Order])
-  @OneToMany(() => Order, order => order.reservation, {cascade: [Cascade.ALL]})
-  orders = new Collection<Order>(this)
+
+  @ManyToOne(() => Table, table => table.reservations)
+  table: Table
+
+  @OneToMany(() => Order, order => order.reservation)
+  orders: Order[]
 }

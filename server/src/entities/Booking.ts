@@ -1,29 +1,31 @@
-import { Cascade, Collection, DateType, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
-import { Reservation } from "./Reservation";
 import { User } from "./User";
+import { Reservation } from "./Reservation";
 
 @ObjectType()
 @Entity()
-export class Booking {
+export class Booking extends BaseEntity{
 
     @Field()
-    @PrimaryKey()
-    id!: number;
+    @PrimaryGeneratedColumn()
+    id: number;
     
     @Field(() => String)
-    @Property({type: DateType})
-    start_date: Date;
+    @CreateDateColumn()
+    startDate: Date;
     
     @Field(() => String)
-    @Property({type: DateType})
-    end_date: Date;
-    
-    @Field(() => [User])
-    @ManyToOne(() => User, { primary: true })
-    user!: User
-    
-    @Field(() => [Reservation])
-    @OneToMany(() => Reservation, reservation => reservation.booking, {cascade: [Cascade.ALL]})
-    reservations = new Collection<Reservation>(this)
+    @CreateDateColumn()
+    endDate: Date;
+
+    @Field()
+    @Column()
+    userId: number;
+
+    @ManyToOne(() => User, user => user.bookings)
+    user: User 
+
+    @OneToMany(() => Reservation, reservation => reservation.booking)
+    reservations: Reservation[]
 }

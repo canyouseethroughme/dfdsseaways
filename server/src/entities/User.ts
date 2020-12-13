@@ -1,24 +1,23 @@
-import { Cascade, Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { Booking } from "./Booking";
 
 @ObjectType()
 @Entity()
-export class User {
+export class User extends BaseEntity{
   
   @Field()
-  @PrimaryKey()
-  id: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
   @Field(() => String)
-  @Property()
-  first_name!: string
+  @Column()
+  firstName: string
 
   @Field(() => String)
-  @Property()
-  last_name!: string;
+  @Column()
+  lastName: string;
 
-  @Field(() => [Booking])
-  @OneToMany(() => Booking, booking => booking.user, {cascade: [Cascade.ALL]})
-  bookings = new Collection<Booking>(this);
+  @OneToMany(() => Booking, booking => booking.user)
+  bookings: Booking[]
 }

@@ -8,8 +8,7 @@
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "dev2": "nodemon --exec ts-node src/index.ts",
-    "start2": "ts-node src/index.ts",
-    "migration:create": "npx mikro-orm migration:create"
+    "start2": "ts-node src/index.ts"
   },
   "keywords": [],
   "author": "Stefan Andrei",
@@ -22,23 +21,13 @@
     "typescript": "^4.1.2"
   },
   "dependencies": {
-    "@mikro-orm/cli": "^4.3.2",
-    "@mikro-orm/core": "^4.3.2",
-    "@mikro-orm/migrations": "^4.3.2",
-    "@mikro-orm/postgresql": "^4.3.2",
     "apollo-server-express": "^2.19.0",
     "class-validator": "^0.12.2",
     "express": "^4.17.1",
     "graphql": "^15.4.0",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
-    "type-graphql": "^1.1.1"
-  },
-  "mikro-orm": {
-    "useTsNode": true,
-    "configPaths": [
-      "./src/mikro-orm.config.ts",
-      "./dist/mikro-orm.config.js"
-    ]
+    "type-graphql": "^1.1.1",
+    "typeorm": "^0.2.29"
   }
 }
