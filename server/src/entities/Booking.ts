@@ -1,4 +1,4 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { Reservation } from "./Reservation";
@@ -8,7 +8,7 @@ import { Reservation } from "./Reservation";
 export class Booking extends BaseEntity{
 
     @Field()
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn({primary: true, default: 50})
     id: number;
     
     @Field(() => String)

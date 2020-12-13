@@ -6,9 +6,11 @@ import { Order } from "./Order";
 @Entity()
 export class OrderItem extends BaseEntity {
 
+  @Field()
   @PrimaryColumn()
   orderId: number;
 
+  @Field()
   @PrimaryColumn()
   menuItemId: number
 
@@ -20,7 +22,7 @@ export class OrderItem extends BaseEntity {
   @Column()
   amount: number;
 
-  @ManyToOne(() => Order, order => order.id)
+  @ManyToOne(() => Order, order => order.id, {onDelete: 'CASCADE'})
   order: Order
 
   @ManyToOne(() => MenuItem, menuItem => menuItem.id)

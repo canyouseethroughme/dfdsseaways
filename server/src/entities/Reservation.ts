@@ -1,4 +1,3 @@
-
 import { Field, Int, ObjectType } from "type-graphql";
 import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Booking } from "./Booking";
@@ -35,6 +34,6 @@ export class Reservation extends BaseEntity {
   @ManyToOne(() => Table, table => table.reservations)
   table: Table
 
-  @OneToMany(() => Order, order => order.reservation)
+  @OneToMany(() => Order, order => order.reservation, {onDelete: 'CASCADE'})
   orders: Order[]
 }
