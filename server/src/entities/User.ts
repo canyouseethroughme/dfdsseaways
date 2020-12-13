@@ -1,18 +1,23 @@
-import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
 import { Booking } from "./Booking";
 
+@ObjectType()
 @Entity()
-export class User {
+export class User extends BaseEntity{
   
-  @PrimaryKey()
-  id: number;
+  @Field()
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-  @Property()
-  first_name!: string
+  @Field(() => String)
+  @Column()
+  firstName: string
 
-  @Property()
-  last_name!: string;
+  @Field(() => String)
+  @Column()
+  lastName: string;
 
   @OneToMany(() => Booking, booking => booking.user)
-  bookings = new Collection<Booking>(this);
+  bookings: Booking[]
 }

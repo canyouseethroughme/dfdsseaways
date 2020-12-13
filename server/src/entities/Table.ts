@@ -1,15 +1,19 @@
-import { Collection, Entity, OneToMany, PrimaryKey, Property } from "@mikro-orm/core";
+import { Field, Int, ObjectType } from "type-graphql";
+import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Reservation } from "./Reservation";
 
+@ObjectType()
 @Entity()
-export class Table {
+export class Table extends BaseEntity {
   
-  @PrimaryKey()
+  @Field()
+  @PrimaryGeneratedColumn()
   id!: number;
 
-  @Property()
-  max_persons!: 2 | 4 | 8; // 2: small_table | 4: medium_table | 8: large_table
+  @Field(() => Int)
+  @Column()
+  maxPersons: 2 | 4 | 8; // 2: small_table | 4: medium_table | 8: large_table
 
-  @OneToMany(() => Reservation, Reservation => Reservation.table)
-  reservations = new Collection<Reservation>(this)
-}
+  @OneToMany(() => Reservation, reservation => reservation.table)
+  reservations: Reservation[]
+} 
