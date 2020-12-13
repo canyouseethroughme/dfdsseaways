@@ -14,8 +14,8 @@ export class OrderItemResolver {
     }
 
     @Mutation(() => OrderItem)
-    async createOrderItem(@Arg('orderId') orderId: number, @Arg('menuItemId') menuItemId: number, @Arg('amount') amount: number): Promise<OrderItem>{
-        return OrderItem.create({orderId, menuItemId, amount}).save()
+    async createOrderItem(@Arg('orderId') orderId: number, @Arg('menuItemId') menuItemId: number, @Arg('amount') amount: number, @Arg('price') price: number): Promise<OrderItem>{
+        return OrderItem.create({orderId, menuItemId, amount, price}).save()
     }
 
     @Mutation(() => OrderItem, {nullable: true})

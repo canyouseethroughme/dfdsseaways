@@ -15,9 +15,9 @@ export class Order extends BaseEntity{
   @Column()
   reservationId: number
 
-  @ManyToOne(() => Reservation, reservation => reservation.id)
+  @ManyToOne(() => Reservation, reservation => reservation.id, {onDelete: 'CASCADE'})
   reservation: Reservation
 
-  @OneToMany(() => OrderItem, orderItem => orderItem.order)
+  @OneToMany(() => OrderItem, orderItem => orderItem.order, {onDelete: 'CASCADE'})
   orderItems: OrderItem[]
 }

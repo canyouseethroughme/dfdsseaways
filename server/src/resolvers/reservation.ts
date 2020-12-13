@@ -14,19 +14,20 @@ export class ReservationResolver {
     }
 
     @Mutation(() => Reservation)
-    async createReservation(@Arg('dateAndTime') dateAndTime: Date, @Arg('noPersons') noPersons: number ): Promise<Reservation>{
-        return Reservation.create({dateAndTime, noPersons}).save()
+    async createReservation(@Arg('dateAndTime') dateAndTime: Date, @Arg('noPersons') noPersons: number, @Arg('bookingId') bookingId: number, @Arg('tableId') tableId: number ): Promise<Reservation>{
+        return Reservation.create({dateAndTime, noPersons, bookingId, tableId}).save()
     }
 
     @Mutation(() => Reservation, {nullable: true})
-    async updateReservation(@Arg('id') id: number, @Arg('dateAndTime') dateAndTime: Date, @Arg('noPersons') noPersons: number): Promise<Reservation | null> {
+    async updateReservation(@Arg('id') id: number, @Arg('dateAndTime') dateAndTime: Date, @Arg('noPersons') noPersons: number, @Arg('bookingId') bookingId: number, @Arg('tableId') tableId: number): Promise<Reservation | null> {
         const reservation = await Reservation.findOne(id)
+       
         if(!reservation) {return null}
 
         if( typeof reservation !== 'undefined'){
-            Reservation.update({id}, {dateAndTime, noPersons})
+             Reservation.update({id}, {dateAndTime, noPersons, bookingId, tableId})
         }
-        return reservation
+        return reservation;
     }
 
     @Mutation(() => Boolean)
