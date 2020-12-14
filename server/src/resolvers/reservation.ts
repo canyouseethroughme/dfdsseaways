@@ -13,10 +13,10 @@ export class ReservationResolver {
 
     @Query(() => Reservation, {nullable: true})
     reservation(
-    
-     @Ctx() {req}: MyContext): Promise<Reservation | undefined> {
-
-        return Reservation.findOne({where: {bookingId: req.session.bookingId}})
+        @Arg('id') id: number,
+        @Ctx() { req }: MyContext
+     ): Promise<Reservation | undefined> {
+        return Reservation.findOne(id, {where: {bookingId: req.session.bookingId}})
     }
 
     @Mutation(() => Reservation)

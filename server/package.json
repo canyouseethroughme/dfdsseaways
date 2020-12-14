@@ -8,7 +8,8 @@
     "dev": "nodemon dist/index.js",
     "start": "node dist/index.js",
     "dev2": "nodemon --exec ts-node src/index.ts",
-    "start2": "ts-node src/index.ts"
+    "start2": "ts-node src/index.ts",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "Stefan Andrei",
@@ -19,6 +20,9 @@
     "@types/express-session": "^1.17.3",
     "@types/node": "^14.14.10",
     "@types/redis": "^2.8.28",
+    "@typescript-eslint/eslint-plugin": "^4.10.0",
+    "@typescript-eslint/parser": "^4.10.0",
+    "eslint": "^7.15.0",
     "nodemon": "^2.0.6",
     "ts-node": "^9.0.0",
     "typescript": "^4.1.2"

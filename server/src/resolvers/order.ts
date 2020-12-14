@@ -3,14 +3,12 @@ import { Arg, Mutation, Query, Resolver } from "type-graphql";
 
 @Resolver()
 export class OrderResolver {
-    @Query(() => [Order])
-    async orders(): Promise<Order[]> {
-       return Order.find()
-    }
 
-    @Query(() => Order, {nullable: true})
-    async order(@Arg('id') id: number): Promise<Order | undefined>{
-        return Order.findOne(id)
+    @Query(() => [Order])
+    async orders(
+        @Arg('reservationId') reservationId: number
+    ): Promise<Order[]> {
+       return Order.find({where: {reservationId}})
     }
 
     @Mutation(() => Order)
