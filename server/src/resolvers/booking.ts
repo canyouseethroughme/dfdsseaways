@@ -1,7 +1,6 @@
 import { Booking } from "../entities/Booking";
 import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
 import { MyContext } from "src/types";
-import { User } from "../entities/User";
 
 @ObjectType()
 class FieldError {
@@ -32,22 +31,12 @@ export class BookingResolver {
         return Booking.findOne(id)
     }
 
-    @Query(() => User, {nullable: true})
-    async me(@Ctx() {req}: MyContext){
-        if(!req.session?.bookingId){
-            return null
-        }
-        const booking = await Booking.findOne(req.session?.bookingId)
-        return User.findOne(booking?.userId)
-    }
-
     @Mutation(() => BookingResponse)
     async login(
         @Arg('bookingId') bookingId: number,
         @Ctx() { req }: MyContext
     ): Promise<BookingResponse> {
         const booking = await Booking.findOne(bookingId)
-
         if(!booking){
             return {
                 errors: [{
@@ -56,9 +45,9 @@ export class BookingResolver {
                 }]
             }
         }
-
-        req.session!.bookingId = booking.id
-
+        
+        req.session.bookingId = booking.id
+        console.log(req.session.cookie.path)
         return {
             booking
         }

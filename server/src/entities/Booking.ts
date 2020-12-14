@@ -8,7 +8,7 @@ import { Reservation } from "./Reservation";
 export class Booking extends BaseEntity{
 
     @Field()
-    @PrimaryColumn({primary: true, default: 50})
+    @PrimaryColumn({primary: true, default:55, generated: true })
     id: number;
     
     @Field(() => String)

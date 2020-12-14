@@ -49,11 +49,13 @@ const main = async () => {
         synchronize: true,
         entities: [Booking, MenuItem, Order, OrderItem, Reservation, Table, User]
     })
+
+    
     // SEEDS
     // await userSeeds()
-    // await bookingSeeds()
     // await menuItemSeeds()
     // await tableSeeds()
+    // await bookingSeeds()
     // await reservationSeeds()
     // await orderSeeds()
     // await orderItemSeeds()
