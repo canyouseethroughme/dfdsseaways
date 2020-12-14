@@ -3,6 +3,10 @@ import { createConnection } from 'typeorm'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
+import redis from 'redis'
+import connectRedis from 'connect-redis'
+import session from 'express-session'
+// /////////////////////////////////////
 
 import { __prod__ } from './constants'
 
@@ -35,8 +39,6 @@ import { BookingResolver } from './resolvers/booking'
 // import { orderItemSeeds } from './seeds/orderItem.seeds'
 // /////////////////////////////////////
 
-
-
 const main = async () => {
     await createConnection({
         type: 'postgres',
@@ -59,12 +61,34 @@ const main = async () => {
    
     const app = express()
 
+    const RedisStore = connectRedis(session)
+    const redisClient = redis.createClient()
+
+    app.use(
+        session({
+            name: 'qid',
+            saveUninitialized: false,
+            store: new RedisStore({
+                client: redisClient,
+                disableTouch: true,
+            }),
+            cookie: {
+                maxAge: 1000 * 60 * 60, // 1 hour
+                httpOnly: true,
+                sameSite: 'lax',  // csrf
+                secure: __prod__ // cookie only works in https
+            },
+            secret: 'secretKey',
+            resave: false
+        })
+    )
+
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [TableResolver, UserResolver, OrderItemResolver, OrderResolver, MenuItemResolver, BookingResolver, ReservationResolver],
             validate: false
         }),
-        context: () => ({  })
+        context: ({ req, res }) => ({ req, res })
     })
 
     apolloServer.applyMiddleware({ app })
