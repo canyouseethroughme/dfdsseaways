@@ -4,11 +4,11 @@ import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
 import redis from 'redis'
-import connectRedis from 'connect-redis'
 import session from 'express-session'
+import connectRedis from 'connect-redis'
 // /////////////////////////////////////
 
-import { __prod__ } from './constants'
+import { COOKIE_NAME, __prod__ } from './constants'
 
 //// IMPORTS FOR ENTITIES
 import { Booking } from './entities/Booking'
@@ -68,7 +68,7 @@ const main = async () => {
 
     app.use(
         session({
-            name: 'qid',
+            name: COOKIE_NAME,
             saveUninitialized: false,
             store: new RedisStore({
                 client: redisClient,
@@ -96,10 +96,12 @@ const main = async () => {
     apolloServer.applyMiddleware({ app })
 
     app.listen(4000, () => {
+        // eslint-disable-next-line no-console
         console.log('server started on localhost:4000')
     })
 }
 
 main().catch(err => {
+    // eslint-disable-next-line no-console
     console.error(err)
 })

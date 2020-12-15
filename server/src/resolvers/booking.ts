@@ -1,6 +1,7 @@
 import { Booking } from "../entities/Booking";
 import { Arg, Ctx, Field, Mutation, ObjectType, Query, Resolver } from "type-graphql";
-import { MyContext } from "src/types";
+import { MyContext } from "../types";
+import { COOKIE_NAME } from "../constants";
 
 @ObjectType()
 class FieldError {
@@ -58,7 +59,7 @@ export class BookingResolver {
     ){
         return new Promise((resolve) =>
             req.session.destroy((err) => {
-            res.clearCookie('qid');
+            res.clearCookie(COOKIE_NAME);
             if (err) {
                 console.log(err);
                 resolve(false);
