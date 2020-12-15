@@ -53,6 +53,7 @@ export class BookingResolver {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     @Mutation(() => Boolean)
     async logout(
         @Ctx() { req, res }: MyContext
@@ -61,6 +62,7 @@ export class BookingResolver {
             req.session.destroy((err) => {
             res.clearCookie(COOKIE_NAME);
             if (err) {
+                // eslint-disable-next-line no-console
                 console.log(err);
                 resolve(false);
                 return;

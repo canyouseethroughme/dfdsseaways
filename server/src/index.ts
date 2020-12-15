@@ -50,7 +50,6 @@ const main = async () => {
         entities: [Booking, MenuItem, Order, OrderItem, Reservation, Table, User]
     })
 
-    
     // SEEDS
     // await userSeeds()
     // await menuItemSeeds()
@@ -75,6 +74,7 @@ const main = async () => {
                 disableTouch: true,
             }),
             cookie: {
+                path: '/',
                 maxAge: 1000 * 60 * 60, // 1 hour
                 httpOnly: true,
                 sameSite: 'lax',  // csrf

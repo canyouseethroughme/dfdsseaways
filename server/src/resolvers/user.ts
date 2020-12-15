@@ -16,9 +16,10 @@ export class UserResolver {
     }
 
     @Query(() => User, {nullable: true})
-    async me(@Ctx() {req}: MyContext){
-        if(!req.session.bookingId){
-            return null
+    async me(@Ctx() { req }: MyContext
+    ): Promise<User | undefined>{
+        if(!req.session.bookingId) {
+            return
         }
         const booking = await Booking.findOne(req.session.bookingId)
         return User.findOne(booking?.userId)
