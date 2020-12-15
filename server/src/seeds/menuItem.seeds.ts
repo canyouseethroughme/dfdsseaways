@@ -1,6 +1,7 @@
 import { MenuItem } from '../entities/MenuItem'
 import { getConnection } from 'typeorm'
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const menuItemSeeds = async () => {
     //// TYPE
     // starter: 1
@@ -45,5 +46,6 @@ export const menuItemSeeds = async () => {
             {type: 6, itemType: 2, name: 'Juice', description: 'Fresh juice made from oranges, apples, grepfruits or strawberries', price: 50},
             {type: 6, itemType: 2, name: 'Soda', description: 'Coca-Cola, Fanta Orange, Faxe Kondi or Tonic water', price: 60},
         ]).execute() 
+    // eslint-disable-next-line no-console
     console.log('menu items', result) 
 }

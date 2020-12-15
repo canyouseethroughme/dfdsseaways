@@ -3,8 +3,12 @@ import { createConnection } from 'typeorm'
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { buildSchema } from 'type-graphql'
+import redis from 'redis'
+import session from 'express-session'
+import connectRedis from 'connect-redis'
+// /////////////////////////////////////
 
-import { __prod__ } from './constants'
+import { COOKIE_NAME, __prod__ } from './constants'
 
 //// IMPORTS FOR ENTITIES
 import { Booking } from './entities/Booking'
@@ -35,8 +39,6 @@ import { BookingResolver } from './resolvers/booking'
 // import { orderItemSeeds } from './seeds/orderItem.seeds'
 // /////////////////////////////////////
 
-
-
 const main = async () => {
     await createConnection({
         type: 'postgres',
@@ -47,11 +49,12 @@ const main = async () => {
         synchronize: true,
         entities: [Booking, MenuItem, Order, OrderItem, Reservation, Table, User]
     })
+
     // SEEDS
     // await userSeeds()
-    // await bookingSeeds()
     // await menuItemSeeds()
     // await tableSeeds()
+    // await bookingSeeds()
     // await reservationSeeds()
     // await orderSeeds()
     // await orderItemSeeds()
@@ -59,21 +62,46 @@ const main = async () => {
    
     const app = express()
 
+    const RedisStore = connectRedis(session)
+    const redisClient = redis.createClient()
+
+    app.use(
+        session({
+            name: COOKIE_NAME,
+            saveUninitialized: false,
+            store: new RedisStore({
+                client: redisClient,
+                disableTouch: true,
+            }),
+            cookie: {
+                path: '/',
+                maxAge: 1000 * 60 * 60, // 1 hour
+                httpOnly: true,
+                sameSite: 'lax',  // csrf
+                secure: __prod__ // cookie only works in https
+            },
+            secret: 'secretKey',
+            resave: false
+        })
+    )
+
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [TableResolver, UserResolver, OrderItemResolver, OrderResolver, MenuItemResolver, BookingResolver, ReservationResolver],
             validate: false
         }),
-        context: () => ({  })
+        context: ({ req, res }) => ({ req, res })
     })
 
     apolloServer.applyMiddleware({ app })
 
     app.listen(4000, () => {
+        // eslint-disable-next-line no-console
         console.log('server started on localhost:4000')
     })
 }
 
 main().catch(err => {
+    // eslint-disable-next-line no-console
     console.error(err)
 })
