@@ -1,0 +1,22 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@dfds-ui/react-components": "^0.8.38",
+    "@emotion/core": "10.0.27",
+    "@emotion/styled": "10.0.27",
+    "next": "10.0.3",
+    "next-compose-plugins": "^2.2.1",
+    "next-transpile-modules": "^6.0.0",
+    "react": "16.10.0",
+    "react-dom": "16.10.0",
+    "react-dates": "^21.8.0",
+    "react-select": "^3.1.1"
+  }
+}
