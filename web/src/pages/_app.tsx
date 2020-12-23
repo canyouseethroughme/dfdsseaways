@@ -1,5 +1,5 @@
 import { ChakraProvider, ColorModeProvider } from '@chakra-ui/react'
-import {GlobalStyles} from '@dfds-ui/react-components'
+import { GlobalStyles } from '@dfds-ui/react-components'
 import theme from '../theme'
 
 function MyApp({ Component, pageProps }: any) {
@@ -9,7 +9,8 @@ function MyApp({ Component, pageProps }: any) {
         options={{
           useSystemColorMode: true,
         }}
-      ><GlobalStyles/>
+      >
+        <GlobalStyles />
         <Component {...pageProps} />
       </ColorModeProvider>
     </ChakraProvider>
