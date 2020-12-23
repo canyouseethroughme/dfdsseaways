@@ -68,7 +68,9 @@ const Index = ({}: IndexProps) => {
                 Cut down the waiting time and order online!
               </Text>
               <Text styledAs="label">
-              Looking for a quick and easy way to book dinner for your trip? Log in with your booking number to order your food and drinks ahead of time!
+                Looking for a quick and easy way to book dinner for your trip?
+                Log in with your booking number to order your food and drinks
+                ahead of time!
               </Text>
             </CardContent>
           </Card>
