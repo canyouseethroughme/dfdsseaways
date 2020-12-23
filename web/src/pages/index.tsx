@@ -3,7 +3,7 @@ import { Form, Formik } from 'formik'
 import { css } from '@emotion/core'
 import { TextField } from '@dfds-ui/forms'
 import { Text } from '@dfds-ui/typography'
-import { Column, CardTitle, Container, Card, CardContent, Button } from '@dfds-ui/react-components'
+import { Column, Container, Card, CardContent, Button } from '@dfds-ui/react-components'
 
 import { PageLayout } from '../components/PageLayout'
 
@@ -16,16 +16,13 @@ const containerStyle = css`
   margin-top: 3rem; 
   
 `
-
-const cardStyle = css`align-items: center; margin-top: 2rem;`;
-
 const Index = ({}: IndexProps) => {
     return (
       <PageLayout heroTitle="DFDS" heroHeadline=" Welcome to SeaWays Restaurant App" heroImg={"/restaurantdfds.jpg"}>    
         <Container>
           <Column l={6} css={containerStyle}>
             <Card size="m" variant="fill"> 
-            <Text styledAs="heroHeadline"><b>DFDS</b> SeaWays <b>Restaurant</b> Booking <b>App</b></Text>
+            <Text styledAs="heroHeadline"><b>DFDS</b> SeaWays <b>Restaurant</b> Booking <b>app</b></Text>
               <CardContent css={css`margin-top: 2rem;`}>   
                 <Formik initialValues={{bookingId: ''}} onSubmit={(values) => console.log(values)}>
                   {() => (
