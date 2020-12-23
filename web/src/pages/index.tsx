@@ -16,9 +16,7 @@ import { PageLayout } from '../components/PageLayout'
 interface IndexProps {}
 
 const containerStyle = css`
-  display: grid;
-  justify-content: center;
-  margin-top: 3rem;
+  margin: 2rem auto;
 `
 const Index = ({}: IndexProps) => {
   return (
@@ -66,10 +64,13 @@ const Index = ({}: IndexProps) => {
               </Formik>
             </CardContent>
             <CardContent>
+              <Text styledAs="labelBold">
+                Cut down the waiting time and order online!
+              </Text>
               <Text styledAs="label">
-                Decide and order your food and drinks in advance by logging in
-                with your booking number. Cut down the waiting time, order
-                online!
+                Looking for a quick and easy way to book dinner for your trip?
+                Log in with your booking number to order your food and drinks
+                ahead of time!
               </Text>
             </CardContent>
           </Card>
