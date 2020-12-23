@@ -1,0 +1,8 @@
+node_modules
+.next
+build
+coverage
+public
+next.config.js
+tsconfig.json
+yarn.lock
