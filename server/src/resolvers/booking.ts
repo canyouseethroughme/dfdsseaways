@@ -27,9 +27,22 @@ export class BookingResolver {
        return Booking.find()
     }
 
-    @Query(() => Booking, {nullable: true})
-    booking(@Arg("id") id: number): Promise<Booking | undefined>{
-        return Booking.findOne(id)
+    @Query(() => BookingResponse, {nullable: true})
+    async booking(
+        @Ctx() { req }: MyContext): Promise<BookingResponse>{
+        const booking = await Booking.findOne({where: {id: req.session.bookingId}})
+        
+        if(!booking){
+            return {
+                errors: [{
+                    field: 'bookingId',
+                    message: 'There is no booking id in your session.'
+                }]
+            }
+        }
+        return {
+            booking
+        }
     }
 
     @Mutation(() => BookingResponse)
