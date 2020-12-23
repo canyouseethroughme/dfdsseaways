@@ -627,6 +627,16 @@
   resolved "https://registry.yarnpkg.com/@dfds-ui/fonts/-/fonts-0.8.38.tgz#8f761fcfbf7203285ff8df64c8c3a144076c0248"
   integrity sha512-rkaGa+61s+0l6xek6L6i2wOsPG62E70/D0EJKBnBjPat0Sy6cWTKKuHb3dPsV2DcSM+2zFBW3jE24auwfqukAw==
 
+"@dfds-ui/forms@^0.8.38":
+  version "0.8.38"
+  resolved "https://registry.yarnpkg.com/@dfds-ui/forms/-/forms-0.8.38.tgz#a197e8126ae74baa96d6180481aa0daa1843c7a1"
+  integrity sha512-VdFDyW4bhmScLgLyudFC4l1QghqHgGJ2QTME4UcVKAv4R6YOhLADJn5N44lI70HRAIlhCFkTiHVfT5sAej9X+Q==
+  dependencies:
+    "@dfds-ui/icons" "0.8.38"
+    "@dfds-ui/react-components" "0.8.38"
+    "@dfds-ui/theme" "0.8.38"
+    "@dfds-ui/typography" "0.8.38"
+
 "@dfds-ui/hooks@0.8.38":
   version "0.8.38"
   resolved "https://registry.yarnpkg.com/@dfds-ui/hooks/-/hooks-0.8.38.tgz#402fa195779a2cf27d076c7927a1239730b6877d"
@@ -639,7 +649,7 @@
   resolved "https://registry.yarnpkg.com/@dfds-ui/icons/-/icons-0.8.38.tgz#789f7c8abfccd9400b5294c54c5545a55d2a94f3"
   integrity sha512-yZW+pAmoGTjGSNICTXhi8en3G4BK+VLVgf4Lx5b4wrDB1S2TVKSeBX9+c5P4n4dyQUESGgBwvg+JOrDVNJZ2uQ==
 
-"@dfds-ui/react-components@^0.8.38":
+"@dfds-ui/react-components@0.8.38", "@dfds-ui/react-components@^0.8.38":
   version "0.8.38"
   resolved "https://registry.yarnpkg.com/@dfds-ui/react-components/-/react-components-0.8.38.tgz#8e0fb587c47eda23ffaa61eece4dff669391f0a3"
   integrity sha512-0Oo0qX2yGHu8j9YSx3EsFU+bi0jiSQ+YbT8maT2zMosP5dd+4rkJZ+GxIP6tCSuQ+XdnfjQLQVna5l7kU+yzlQ==
@@ -2295,6 +2305,11 @@ deepmerge@^1.5.2:
   resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-1.5.2.tgz#10499d868844cdad4fee0842df8c7f6f0c95a753"
   integrity sha512-95k0GDqvBjZavkuvzx/YqVLv/6YYa17fz6ILMSf7neqQITCPbnfEnQvEgMPNjH4kgobe7+WIL0yJEHku+H3qtQ==
 
+deepmerge@^2.1.1:
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-2.2.1.tgz#5d3ff22a01c00f645405a2fbc17d0778a1801170"
+  integrity sha512-R9hc1Xa/NOBi9WRVUWg19rl1UB7Tt4kuPd+thNJgFZoxXsTz7ncaPaeIm+40oSGuP33DfMb4sZt1QIGiJzC4EA==
+
 define-properties@^1.1.2, define-properties@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/define-properties/-/define-properties-1.1.3.tgz#cf88da6cbee26fe6db7094f61d870cbd84cee9f1"
@@ -2837,6 +2852,19 @@ for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
   integrity sha1-gQaNKVqBQuwKxybG4iAMMPttXoA=
+
+formik@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-2.2.6.tgz#378a4bafe4b95caf6acf6db01f81f3fe5147559d"
+  integrity sha512-Kxk2zQRafy56zhLmrzcbryUpMBvT0tal5IvcifK5+4YNGelKsnrODFJ0sZQRMQboblWNym4lAW3bt+tf2vApSA==
+  dependencies:
+    deepmerge "^2.1.1"
+    hoist-non-react-statics "^3.3.0"
+    lodash "^4.17.14"
+    lodash-es "^4.17.14"
+    react-fast-compare "^2.0.1"
+    tiny-warning "^1.0.2"
+    tslib "^1.10.0"
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -3662,6 +3690,11 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
+lodash-es@^4.17.14:
+  version "4.17.20"
+  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.20.tgz#29f6332eefc60e849f869c264bc71126ad61e8f7"
+  integrity sha512-JD1COMZsq8maT6mnuz1UMV0jvYD0E0aUsSOdrr1/nAG3dhqQXwRRgeW0cSqH1U43INKcqxaiVIQNOUDld7gRDA==
+
 lodash.mergewith@4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lodash.mergewith/-/lodash.mergewith-4.6.2.tgz#617121f89ac55f59047c7aec1ccd6654c6590f55"
@@ -3677,7 +3710,7 @@ lodash.throttle@^4.1.1:
   resolved "https://registry.yarnpkg.com/lodash.throttle/-/lodash.throttle-4.1.1.tgz#c23e91b710242ac70c37f1e1cda9274cc39bf2f4"
   integrity sha1-wj6RtxAkKscMN/HhzaknTMOb8vQ=
 
-lodash@^4.1.1, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.19:
+lodash@^4.1.1, lodash@^4.17.11, lodash@^4.17.13, lodash@^4.17.14, lodash@^4.17.19:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -4697,6 +4730,11 @@ react-fast-compare@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
+
+react-fast-compare@^2.0.1:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
+  integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
 
 react-focus-lock@2.4.1:
   version "2.4.1"
