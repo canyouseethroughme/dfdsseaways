@@ -9,12 +9,18 @@ import { PageLayout } from '../components/PageLayout'
 import { InputField } from '../components/InputField'
 import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
-interface IndexProps {}
-
 const containerStyle = css`
   margin: 2rem auto;
 `
-const Index = ({}: IndexProps) => {
+
+const buttonStyle = css`
+  font-family: DFDS,Verdana,system-ui,Arial,"Helvetica Neue",Helvetica,sans-serif;
+  background: rgb(237, 136, 0);
+  :hover{
+    background: rgb(242, 163, 59)
+  }
+`
+const Index = () => {
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -27,11 +33,7 @@ const Index = ({}: IndexProps) => {
             <Text styledAs="heroHeadline">
               <b>DFDS</b> SeaWays <b>Restaurant</b> Booking <b>app</b>
             </Text>
-            <CardContent
-              css={css`
-                margin-top: 2rem;
-              `}
-            >
+            <CardContent>
               <Formik
                 initialValues={{ bookingId: '' }}
                 onSubmit={(values) => console.log(values)}
@@ -43,15 +45,13 @@ const Index = ({}: IndexProps) => {
                         name="bookingId"
                         label="Booking No."
                         placeholder="Type here ..."
-                        css={css`
-                          width: auto;
-                        `}
                       />
                       <FlexBox itemsFlexEnd>
                         <Button
                           type="submit"
                           isLoading={isSubmitting}
                           variantColor="orange"
+                          css={buttonStyle}
                         >
                           Log In
                         </Button>
