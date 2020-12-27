@@ -40,7 +40,7 @@ const Index = () => {
               >
                 {({ isSubmitting }) => (
                   <Form>
-                    <FlexBox>
+                    <FlexBox justifyCenter>
                       <InputField
                         name="bookingId"
                         label="Booking No."
@@ -66,7 +66,7 @@ const Index = () => {
                 Cut down the waiting time and order online!
               </Text>
               <Text styledAs="label">
-                Looking for a quick and easy way to book dinner for your trip?
+                Looking for a quick and easy way to book a table for your trip?
                 Log in with your booking number to order your food and drinks
                 ahead of time!
               </Text>
