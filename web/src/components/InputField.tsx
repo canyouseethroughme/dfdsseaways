@@ -13,8 +13,9 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string
 }
 
-const inputStyle = css`
-  width: 17rem;
+const inputStyle = (error: string) => css`
+  ${error ? css`margin-bottom: 0;` : css`margin-bottom: 1.5rem;`}
+  width: 100%;
   ::placeholder{
     font-family: DFDS,Verdana,system-ui,Arial,"Helvetica Neue",Helvetica,sans-serif;
   }
@@ -30,14 +31,14 @@ export const InputField= ({
 }: InputFieldProps) => {
   const [field, { error }] = useField(props)
   return (
-    <FormControl isInvalid={!!error}>
+    <FormControl isInvalid={!!error} css={css`width: 100%;`}>
       <FormLabel htmlFor={field.name} css={labelStyle}>{label}</FormLabel>
       <Input
         {...field}
         {...props}
         id={field.name}
         placeholder={props.placeholder}
-        css={inputStyle}
+        css={inputStyle(error)}
       />
       {error ? <FormErrorMessage>{error}</FormErrorMessage> : null}
     </FormControl>

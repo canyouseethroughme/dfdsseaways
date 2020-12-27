@@ -14,6 +14,8 @@ const containerStyle = css`
 `
 
 const buttonStyle = css`
+  margin-top: 2rem;
+  width: 6rem;
   font-family: DFDS,Verdana,system-ui,Arial,"Helvetica Neue",Helvetica,sans-serif;
   background: rgb(237, 136, 0);
   :hover{
@@ -29,11 +31,11 @@ const Index = () => {
     >
       <Container>
         <Column l={6} css={containerStyle}>
-          <Card size="m" variant="fill">
+          <Card size="m" variant="fill" css={css`width: 100%;`}>
             <Text styledAs="heroHeadline">
               <b>DFDS</b> SeaWays <b>Restaurant</b> Booking <b>app</b>
             </Text>
-            <CardContent>
+            <CardContent css={css`margin-top: 1rem;`}>
               <Formik
                 initialValues={{ bookingId: '' }}
                 onSubmit={(values) => console.log(values)}
@@ -46,7 +48,7 @@ const Index = () => {
                         label="Booking No."
                         placeholder="Type here ..."
                       />
-                      <FlexBox itemsFlexEnd>
+                     
                         <Button
                           type="submit"
                           isLoading={isSubmitting}
@@ -56,7 +58,7 @@ const Index = () => {
                           Log In
                         </Button>
                       </FlexBox>
-                    </FlexBox>
+                 
                   </Form>
                 )}
               </Formik>
