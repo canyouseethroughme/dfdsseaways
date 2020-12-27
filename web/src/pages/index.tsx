@@ -1,17 +1,13 @@
 import React from 'react'
-import { Form, Formik } from 'formik'
 import { css } from '@emotion/core'
-import { TextField } from '@dfds-ui/forms'
+import { Form, Formik } from 'formik'
 import { Text } from '@dfds-ui/typography'
-import {
-  Column,
-  Container,
-  Card,
-  CardContent,
-  Button,
-} from '@dfds-ui/react-components'
+import { Button } from '@chakra-ui/core'
+import { Column, Container, Card, CardContent } from '@dfds-ui/react-components'
 
 import { PageLayout } from '../components/PageLayout'
+import { InputField } from '../components/InputField'
+import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
 interface IndexProps {}
 
@@ -40,25 +36,27 @@ const Index = ({}: IndexProps) => {
                 initialValues={{ bookingId: '' }}
                 onSubmit={(values) => console.log(values)}
               >
-                {() => (
+                {({ isSubmitting }) => (
                   <Form>
-                    <TextField
-                      name="bookingId"
-                      label="Booking Number"
-                      required
-                      errorMessage=""
-                      defaultValue=""
-                      hintText="Type here.."
-                      adornment={
+                    <FlexBox>
+                      <InputField
+                        name="bookingId"
+                        label="Booking No."
+                        placeholder="Type here ..."
+                        css={css`
+                          width: auto;
+                        `}
+                      />
+                      <FlexBox itemsFlexEnd>
                         <Button
-                          css={css`
-                            height: 40px;
-                          `}
+                          type="submit"
+                          isLoading={isSubmitting}
+                          variantColor="orange"
                         >
                           Log In
                         </Button>
-                      }
-                    />
+                      </FlexBox>
+                    </FlexBox>
                   </Form>
                 )}
               </Formik>
