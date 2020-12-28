@@ -14,25 +14,36 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const inputStyle = (error: string) => css`
-  ${error ? css`margin-bottom: 0;` : css`margin-bottom: 1.5rem;`}
+  ${error
+    ? css`
+        margin-bottom: 0;
+      `
+    : css`
+        margin-bottom: 1.5rem;
+      `}
   width: 100%;
-  ::placeholder{
-    font-family: DFDS,Verdana,system-ui,Arial,"Helvetica Neue",Helvetica,sans-serif;
+  ::placeholder {
+    font-family: DFDS, Verdana, system-ui, Arial, 'Helvetica Neue', Helvetica,
+      sans-serif;
   }
 `
 const labelStyle = css`
-   font-family: DFDS,Verdana,system-ui,Arial,"Helvetica Neue",Helvetica,sans-serif;
+  font-family: DFDS, Verdana, system-ui, Arial, 'Helvetica Neue', Helvetica,
+    sans-serif;
 `
 
-export const InputField= ({
-  label,
-  size: _,
-  ...props
-}: InputFieldProps) => {
+export const InputField = ({ label, size: _, ...props }: InputFieldProps) => {
   const [field, { error }] = useField(props)
   return (
-    <FormControl isInvalid={!!error} css={css`width: 100%;`}>
-      <FormLabel htmlFor={field.name} css={labelStyle}>{label}</FormLabel>
+    <FormControl
+      isInvalid={!!error}
+      css={css`
+        width: 100%;
+      `}
+    >
+      <FormLabel htmlFor={field.name} css={labelStyle}>
+        {label}
+      </FormLabel>
       <Input
         {...field}
         {...props}
