@@ -6,6 +6,7 @@ import { buildSchema } from 'type-graphql'
 import redis from 'redis'
 import session from 'express-session'
 import connectRedis from 'connect-redis'
+import cors from 'cors'
 // /////////////////////////////////////
 
 import { COOKIE_NAME, __prod__ } from './constants'
@@ -65,6 +66,11 @@ const main = async () => {
     const RedisStore = connectRedis(session)
     const redisClient = redis.createClient()
 
+    app.use(cors({
+        origin: 'http://localhost:3000',
+        credentials: true
+    }))
+
     app.use(
         session({
             name: COOKIE_NAME,
@@ -93,7 +99,7 @@ const main = async () => {
         context: ({ req, res }) => ({ req, res })
     })
 
-    apolloServer.applyMiddleware({ app })
+    apolloServer.applyMiddleware({ app, cors: false })
 
     app.listen(4000, () => {
         // eslint-disable-next-line no-console

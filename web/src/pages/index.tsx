@@ -1,13 +1,14 @@
 import React from 'react'
 import { css } from '@emotion/core'
 import { Form, Formik } from 'formik'
+import { useMutation } from 'urql'
 import { Text } from '@dfds-ui/typography'
 import { Button } from '@chakra-ui/core'
 import { Column, Container, Card, CardContent } from '@dfds-ui/react-components'
+import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
 import { PageLayout } from '../components/PageLayout'
 import { InputField } from '../components/InputField'
-import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
 const containerStyle = css`
   margin: 2rem auto;
@@ -22,7 +23,24 @@ const buttonStyle = css`
     background: rgb(242, 163, 59)
   }
 `
+
+const LOGIN_MUT = `
+mutation Login($bookingId: Float!){
+  login(bookingId: $bookingId){
+    booking{
+      id
+      startDate
+      endDate
+      userId
+    }
+    errors{
+      message
+    }
+  }
+}`
+
 const Index = () => {
+  const [, login] = useMutation(LOGIN_MUT)
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -38,7 +56,9 @@ const Index = () => {
             <CardContent css={css`margin-top: 1rem;`}>
               <Formik
                 initialValues={{ bookingId: '' }}
-                onSubmit={(values) => console.log(values)}
+                onSubmit={(values) => { 
+                  return login({bookingId: parseFloat(values.bookingId)})
+                }}
               >
                 {({ isSubmitting }) => (
                   <Form>
