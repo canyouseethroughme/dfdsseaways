@@ -1,0 +1,14 @@
+mutation Login($bookingId: Float!) {
+  login(bookingId: $bookingId) {
+    booking {
+      id
+      startDate
+      endDate
+      userId
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

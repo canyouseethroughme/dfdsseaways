@@ -55,7 +55,7 @@ export class BookingResolver {
             return {
                 errors: [{
                     field: 'bookingId',
-                    message: `That booking number doesn't exist.`
+                    message: 'The booking number you provided is not valid.'
                 }]
             }
         }
