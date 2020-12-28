@@ -34,7 +34,7 @@ const Index = ({}) => {
   return (
     <PageLayout
       heroTitle="DFDS"
-      heroHeadline=" Welcome to SeaWays Restaurant App"
+      heroHeadline="Welcome to SeaWays Restaurant App"
       heroImg={'/restaurantdfds.jpg'}
     >
       <Container>
@@ -56,14 +56,16 @@ const Index = ({}) => {
             >
               <Formik
                 initialValues={{ bookingId: '' }}
-                onSubmit={ async (values, {setErrors}) => {
-                  const response = await login({ bookingId: parseFloat(values.bookingId) })
+                onSubmit={async (values, { setErrors }) => {
+                  const response = await login({
+                    bookingId: parseFloat(values.bookingId),
+                  })
 
-                if(response.data?.login.errors){
-                  setErrors(toErrorMap(response.data.login.errors))
-                } else if (response.data.login.booking) {
-                  router.push('/reservations')
-                }
+                  if (response.data?.login.errors) {
+                    setErrors(toErrorMap(response.data.login.errors))
+                  } else if (response.data.login.booking) {
+                    router.push('/reservations')
+                  }
                 }}
               >
                 {({ isSubmitting }) => (
