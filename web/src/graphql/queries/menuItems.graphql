@@ -1,0 +1,10 @@
+query MenuItems {
+  menuItems {
+    id
+    name
+    price
+    description
+    type
+    itemType
+  }
+}

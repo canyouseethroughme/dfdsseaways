@@ -214,6 +214,17 @@ export type MeQuery = { __typename?: 'Query' } & {
   me?: Maybe<{ __typename?: 'User' } & Pick<User, 'id' | 'firstName'>>
 }
 
+export type MenuItemsQueryVariables = Exact<{ [key: string]: never }>
+
+export type MenuItemsQuery = { __typename?: 'Query' } & {
+  menuItems: Array<
+    { __typename?: 'MenuItem' } & Pick<
+      MenuItem,
+      'id' | 'name' | 'price' | 'description' | 'type' | 'itemType'
+    >
+  >
+}
+
 export const LoginDocument = gql`
   mutation Login($bookingId: Float!) {
     login(bookingId: $bookingId) {
@@ -247,4 +258,22 @@ export function useMeQuery(
   options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}
 ) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options })
+}
+export const MenuItemsDocument = gql`
+  query MenuItems {
+    menuItems {
+      id
+      name
+      price
+      description
+      type
+      itemType
+    }
+  }
+`
+
+export function useMenuItemsQuery(
+  options: Omit<Urql.UseQueryArgs<MenuItemsQueryVariables>, 'query'> = {}
+) {
+  return Urql.useQuery<MenuItemsQuery>({ query: MenuItemsDocument, ...options })
 }
