@@ -1,17 +1,33 @@
 import React from 'react'
 
 import { css } from '@emotion/core'
-import { useMeQuery, useMenuItemsQuery } from '../generated/graphql'
+import {
+  useMeQuery,
+  useMenuItemsQuery,
+  useReservationsQuery,
+} from '../generated/graphql'
 
 import { PageLayout } from '../components/PageLayout'
-import { Column, Container, Card, Button } from '@dfds-ui/react-components'
+import {
+  Column,
+  Container,
+  Card,
+  Button,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableHeaderCell,
+  TableDataCell,
+} from '@dfds-ui/react-components'
 import { Modal } from '@dfds-ui/modal'
 
 const Reservations = ({}) => {
   const [meData] = useMeQuery()
-  const [menuItems] = useMenuItemsQuery()
+  const [menuItemsData] = useMenuItemsQuery()
+  const [reservationsData] = useReservationsQuery()
   const [openModal, setOpenModal] = React.useState(false)
-  console.log(menuItems)
+
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -45,12 +61,12 @@ const Reservations = ({}) => {
               }}
             >
               <div>
-                {menuItems.data?.menuItems.map((menuItem) => {
+                {menuItemsData.data?.menuItems.map((menuItem, index) => {
                   return (
-                    <>
+                    <React.Fragment key={index}>
                       <p>{menuItem.name}</p>
                       <p>{menuItem.price}</p>
-                    </>
+                    </React.Fragment>
                   )
                 })}
               </div>
@@ -59,7 +75,26 @@ const Reservations = ({}) => {
         </Column>
         <Column l={4}>
           <Card size="m" variant="fill">
-            Table
+            <Table isInteractive>
+              <TableHead>
+                <TableRow>
+                  <TableHeaderCell>Reservation ID</TableHeaderCell>
+                  <TableHeaderCell>Date & Time</TableHeaderCell>
+                  <TableHeaderCell>No. of persons</TableHeaderCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {reservationsData.data?.reservations.map(
+                  (reservation, index) => (
+                    <TableRow key={index}>
+                      <TableDataCell>{reservation.id}</TableDataCell>
+                      <TableDataCell>{reservation.dateAndTime}</TableDataCell>
+                      <TableDataCell>{reservation.noPersons}</TableDataCell>
+                    </TableRow>
+                  )
+                )}
+              </TableBody>
+            </Table>
           </Card>
         </Column>
       </Container>

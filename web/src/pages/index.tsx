@@ -51,7 +51,6 @@ const Index = ({}) => {
                   const response = await login({
                     bookingId: parseFloat(values.bookingId),
                   })
-                  console.log(response)
                   if (response.data?.login.errors) {
                     setErrors(toErrorMap(response.data.login.errors))
                   } else if (response.data.login.booking) {

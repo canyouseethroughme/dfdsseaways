@@ -225,6 +225,17 @@ export type MenuItemsQuery = { __typename?: 'Query' } & {
   >
 }
 
+export type ReservationsQueryVariables = Exact<{ [key: string]: never }>
+
+export type ReservationsQuery = { __typename?: 'Query' } & {
+  reservations: Array<
+    { __typename?: 'Reservation' } & Pick<
+      Reservation,
+      'id' | 'bookingId' | 'noPersons' | 'dateAndTime' | 'tableId'
+    >
+  >
+}
+
 export const LoginDocument = gql`
   mutation Login($bookingId: Float!) {
     login(bookingId: $bookingId) {
@@ -276,4 +287,24 @@ export function useMenuItemsQuery(
   options: Omit<Urql.UseQueryArgs<MenuItemsQueryVariables>, 'query'> = {}
 ) {
   return Urql.useQuery<MenuItemsQuery>({ query: MenuItemsDocument, ...options })
+}
+export const ReservationsDocument = gql`
+  query Reservations {
+    reservations {
+      id
+      bookingId
+      noPersons
+      dateAndTime
+      tableId
+    }
+  }
+`
+
+export function useReservationsQuery(
+  options: Omit<Urql.UseQueryArgs<ReservationsQueryVariables>, 'query'> = {}
+) {
+  return Urql.useQuery<ReservationsQuery>({
+    query: ReservationsDocument,
+    ...options,
+  })
 }
