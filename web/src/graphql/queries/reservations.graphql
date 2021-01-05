@@ -1,0 +1,9 @@
+query Reservations {
+  reservations {
+    id
+    bookingId
+    noPersons
+    dateAndTime
+    tableId
+  }
+}

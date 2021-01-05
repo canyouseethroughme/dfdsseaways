@@ -4,6 +4,7 @@ const withTranspileModules = require('next-transpile-modules')([
     '@dfds-ui/colors',
     '@dfds-ui/icons',
     '@dfds-ui/forms',
+    '@dfds-ui/modal'
 ])
 
 module.exports = withPlugins([[withTranspileModules]].filter(Boolean))

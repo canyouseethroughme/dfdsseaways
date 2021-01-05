@@ -5,36 +5,26 @@ import { useRouter } from 'next/router'
 
 import { useLoginMutation } from '../generated/graphql'
 import { Text } from '@dfds-ui/typography'
-import { Button } from '@chakra-ui/core'
 import { Column, Container, Card, CardContent } from '@dfds-ui/react-components'
 import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
 import { PageLayout } from '../components/PageLayout'
-import { InputField } from '../components/InputField'
 import { toErrorMap } from '../utils/toErrorMap'
+import InputField from '../components/InputField'
+import StyledButton from '../components/StyledButton'
 
-const containerStyle = css`
+export const containerStyle = css`
   margin: 2rem auto;
-`
-
-const buttonStyle = css`
-  margin-top: 2rem;
-  width: 6rem;
-  font-family: DFDS, Verdana, system-ui, Arial, 'Helvetica Neue', Helvetica,
-    sans-serif;
-  background: rgb(237, 136, 0);
-  :hover {
-    background: rgb(242, 163, 59);
-  }
 `
 
 const Index = ({}) => {
   const router = useRouter()
   const [, login] = useLoginMutation()
+
   return (
     <PageLayout
       heroTitle="DFDS"
-      heroHeadline=" Welcome to SeaWays Restaurant App"
+      heroHeadline="Welcome to SeaWays Restaurant App"
       heroImg={'/restaurantdfds.jpg'}
     >
       <Container>
@@ -52,18 +42,20 @@ const Index = ({}) => {
             <CardContent
               css={css`
                 margin-top: 1rem;
+                height: 7rem;
               `}
             >
               <Formik
                 initialValues={{ bookingId: '' }}
-                onSubmit={ async (values, {setErrors}) => {
-                  const response = await login({ bookingId: parseFloat(values.bookingId) })
-
-                if(response.data?.login.errors){
-                  setErrors(toErrorMap(response.data.login.errors))
-                } else if (response.data.login.booking) {
-                  router.push('/reservations')
-                }
+                onSubmit={async (values, { setErrors }) => {
+                  const response = await login({
+                    bookingId: parseFloat(values.bookingId),
+                  })
+                  if (response.data?.login.errors) {
+                    setErrors(toErrorMap(response.data.login.errors))
+                  } else if (response.data.login.booking) {
+                    router.push('/reservations')
+                  }
                 }}
               >
                 {({ isSubmitting }) => (
@@ -74,15 +66,14 @@ const Index = ({}) => {
                         label="Booking No."
                         placeholder="Type here ..."
                       />
-
-                      <Button
+                      <StyledButton
                         type="submit"
                         isLoading={isSubmitting}
                         variantColor="orange"
-                        css={buttonStyle}
+                        buttonSize="small"
                       >
                         Log In
-                      </Button>
+                      </StyledButton>
                     </FlexBox>
                   </Form>
                 )}

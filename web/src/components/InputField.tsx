@@ -32,7 +32,7 @@ const labelStyle = css`
     sans-serif;
 `
 
-export const InputField = ({ label, size: _, ...props }: InputFieldProps) => {
+const InputField = ({ label, size: _, ...props }: InputFieldProps) => {
   const [field, { error }] = useField(props)
   return (
     <FormControl
@@ -55,3 +55,5 @@ export const InputField = ({ label, size: _, ...props }: InputFieldProps) => {
     </FormControl>
   )
 }
+
+export default InputField
