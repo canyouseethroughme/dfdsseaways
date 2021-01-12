@@ -1,11 +1,16 @@
 import { Field, Int, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { OrderItem } from "./OrderItem";
 
 @ObjectType()
 @Entity()
-export class MenuItem extends BaseEntity{
-  
+export class MenuItem extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
@@ -18,19 +23,24 @@ export class MenuItem extends BaseEntity{
   @Column()
   description!: string;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Column()
-  type!: 1 | 2 | 3 | 4 | 5 | 6 // 1: starter | 2: main_course | 3: side_orders | 4: desert | 5: alcoholic | 6: nonalcoholic
+  category:
+    | "starter"
+    | "main_course"
+    | "side_orders"
+    | "desert"
+    | "alcoholic"
+    | "nonalcoholic";
 
   @Field(() => Int)
   @Column()
   price!: number;
 
-  @Field(() => Int)
+  @Field(() => String)
   @Column()
-  itemType!: 1 | 2; // 1: food | 2: drink
+  itemType: "food" | "drink";
 
-  @OneToMany(() => OrderItem, orderItem => orderItem.menuItemId)
-  orderItems: OrderItem[]
-
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.menuItemId)
+  orderItems: OrderItem[];
 }
