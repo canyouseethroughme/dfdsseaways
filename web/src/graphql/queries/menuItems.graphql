@@ -4,7 +4,7 @@ query MenuItems {
     name
     price
     description
-    type
+    category
     itemType
   }
 }

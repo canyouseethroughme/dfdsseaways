@@ -62,8 +62,8 @@ const BookTable = ({}) => {
   const handleTimeChange = (time: MaterialUiPickersDate) => {
     setSelectedTime(time)
   }
-  console.log('selectedDate', selectedDate)
-  console.log('counterNoPersons', counterNoPersons)
+  // console.log('selectedDate', selectedDate)
+  // console.log('counterNoPersons', counterNoPersons)
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -118,7 +118,6 @@ const BookTable = ({}) => {
                     <p>select date from date picker</p>
                     <DatePicker
                       autoOk
-                      orientation="landscape"
                       variant="static"
                       openTo="date"
                       value={selectedDate}
@@ -158,8 +157,7 @@ const BookTable = ({}) => {
                       autoOk
                       ampm={false}
                       variant="static"
-                      orientation="landscape"
-                      openTo="minutes"
+                      openTo="hours"
                       value={selectedTime}
                       onChange={(t) => handleTimeChange(t)}
                     />

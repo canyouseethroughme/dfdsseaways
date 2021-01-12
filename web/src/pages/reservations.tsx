@@ -90,13 +90,27 @@ const Reservations = ({}) => {
               </TableHead>
               <TableBody>
                 {reservationsData.data?.reservations.map(
-                  (reservation, index) => (
-                    <TableRow key={index}>
-                      <TableDataCell>{reservation.id}</TableDataCell>
-                      <TableDataCell>{reservation.dateAndTime}</TableDataCell>
-                      <TableDataCell>{reservation.noPersons}</TableDataCell>
-                    </TableRow>
-                  )
+                  (reservation, index) => {
+                    let date = new Date(parseInt(reservation.dateAndTime))
+                    return (
+                      <TableRow key={index}>
+                        <TableDataCell>{reservation.id}</TableDataCell>
+                        <TableDataCell>
+                          {date.getDate() +
+                            '-' +
+                            (date.getMonth() + 1) +
+                            '-' +
+                            date.getFullYear() +
+                            ' & ' +
+                            date.getHours() +
+                            ':' +
+                            date.getMinutes() +
+                            0}
+                        </TableDataCell>
+                        <TableDataCell>{reservation.noPersons}</TableDataCell>
+                      </TableRow>
+                    )
+                  }
                 )}
               </TableBody>
             </Table>

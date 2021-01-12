@@ -1,31 +1,37 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "./User";
 import { Reservation } from "./Reservation";
 
 @ObjectType()
 @Entity()
-export class Booking extends BaseEntity{
+export class Booking extends BaseEntity {
+  @Field()
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Field()
-    @PrimaryGeneratedColumn()
-    id: number;
-    
-    @Field(() => String)
-    @CreateDateColumn()
-    startDate: Date;
-    
-    @Field(() => String)
-    @CreateDateColumn()
-    endDate: Date;
+  @Field(() => String)
+  @Column({ type: "timestamp" })
+  startDate: Date;
 
-    @Field()
-    @Column()
-    userId: number;
+  @Field(() => String)
+  @Column({ type: "timestamp" })
+  endDate: Date;
 
-    @ManyToOne(() => User, user => user.bookings)
-    user: User 
+  @Field()
+  @Column()
+  userId: number;
 
-    @OneToMany(() => Reservation, reservation => reservation.booking)
-    reservations: Reservation[]
+  @ManyToOne(() => User, (user) => user.bookings)
+  user: User;
+
+  @OneToMany(() => Reservation, (reservation) => reservation.booking)
+  reservations: Reservation[];
 }
