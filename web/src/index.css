@@ -1,0 +1,27 @@
+.MuiPickersToolbar-toolbar,
+.MuiPickersDay-daySelected,
+.MuiPickersClockPointer-pointer,
+.MuiPickersClock-pin,
+.MuiPickersClockPointer-thumb,
+.MuiPickersClockPointer-noPoint {
+  background-color: #68b2e3;
+}
+
+.MuiPickersClockPointer-thumb {
+  border-color: #68b2e3;
+}
+
+.MuiPickersDay-daySelected:hover {
+  background-color: #68b2e3;
+  opacity: 0.8;
+}
+
+.MuiTypography-subtitle1,
+.MuiTypography-caption,
+.MuiTypography-body1,
+.MuiTypography-body2,
+.MuiTypography-h4,
+.MuiTypography-h3 {
+  font-family: DFDS, Verdana, system-ui, Arial, 'Helvetica Neue', Helvetica,
+    sans-serif;
+}

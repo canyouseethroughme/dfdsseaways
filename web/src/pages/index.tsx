@@ -20,7 +20,6 @@ export const containerStyle = css`
 const Index = ({}) => {
   const router = useRouter()
   const [, login] = useLoginMutation()
-
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -53,7 +52,7 @@ const Index = ({}) => {
                   })
                   if (response.data?.login.errors) {
                     setErrors(toErrorMap(response.data.login.errors))
-                  } else if (response.data.login.booking) {
+                  } else if (response.data?.login.booking) {
                     router.push('/reservations')
                   }
                 }}

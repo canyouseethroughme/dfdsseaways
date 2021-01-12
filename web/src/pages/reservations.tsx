@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 
 import { css } from '@emotion/core'
 import {
@@ -26,23 +27,27 @@ const Reservations = ({}) => {
   const [meData] = useMeQuery()
   const [menuItemsData] = useMenuItemsQuery()
   const [reservationsData] = useReservationsQuery()
-  const [openModal, setOpenModal] = React.useState(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const router = useRouter()
 
   return (
     <PageLayout
       heroTitle="DFDS"
-      heroHeadline={`Welcome ${meData.data?.me.firstName}`}
+      heroHeadline={`Welcome ${meData.data?.me?.firstName}`}
       heroImg={'/kidfds.jpg'}
     >
       <Container fluid>
         <Column
-          l={4}
+          l={5}
+          m={12}
           css={css`
             margin: auto;
           `}
         >
           <Card size="m" variant="fill">
-            <Button type="button">BOOK A TABLE</Button>
+            <Button onClick={() => router.push('/bookTable')}>
+              BOOK A TABLE
+            </Button>
             <Button onClick={() => setOpenModal(true)}>VIEW MENU</Button>
             <Modal
               css={css`
@@ -73,7 +78,7 @@ const Reservations = ({}) => {
             </Modal>
           </Card>
         </Column>
-        <Column l={4}>
+        <Column l={5} m={12}>
           <Card size="m" variant="fill">
             <Table isInteractive>
               <TableHead>
