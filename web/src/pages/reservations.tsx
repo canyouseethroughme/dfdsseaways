@@ -84,7 +84,6 @@ const Reservations = ({}) => {
             <Table isInteractive>
               <TableHead>
                 <TableRow>
-                  <TableHeaderCell>Reservation No.</TableHeaderCell>
                   <TableHeaderCell align="center">Date & Time</TableHeaderCell>
                   <TableHeaderCell>No. of persons</TableHeaderCell>
                 </TableRow>
@@ -94,14 +93,15 @@ const Reservations = ({}) => {
                   (reservation, index) => {
                     return (
                       <TableRow key={index}>
-                        <TableDataCell>{reservation.id}</TableDataCell>
                         <TableDataCell align="center">
                           {format(
                             new Date(parseInt(reservation.dateAndTime)),
                             'dd/MM/yyyy @ HH:mm'
                           )}
                         </TableDataCell>
-                        <TableDataCell>{reservation.noPersons}</TableDataCell>
+                        <TableDataCell align="center">
+                          {reservation.noPersons}
+                        </TableDataCell>
                       </TableRow>
                     )
                   }

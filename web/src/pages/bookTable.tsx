@@ -17,6 +17,9 @@ import {
   TableBody,
   TableDataCell,
   TableRow,
+  ListItem,
+  ListText,
+  ListTextGroup,
 } from '@dfds-ui/react-components'
 import { Text } from '@dfds-ui/typography'
 import { useRouter } from 'next/router'
@@ -30,7 +33,7 @@ import {
 import DateFnsUtils from '@date-io/date-fns'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 import moment from 'moment'
-import menu from '@dfds-ui/react-components/menu/Menu'
+import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
 interface Sections {
   noPersons: boolean
@@ -41,11 +44,16 @@ interface Sections {
   confirmation: boolean
 }
 
-interface MenuItem {
+interface MenuSectionType {
+  header: string
+  dbKey: string
+}
+
+interface OrderItem {
   id: number
-  name: string
-  description: string
+  amount?: number
   price: number
+  name: string
 }
 
 const BookTable = ({}) => {
@@ -56,6 +64,19 @@ const BookTable = ({}) => {
 
   const [bookingStartDate, setBookingStartDate] = useState<string>()
   const [bookingEndDate, setBookingEndDate] = useState<string>()
+  const [isSectionOpen, setIsSectionOpen] = useState<Sections>({
+    noPersons: true,
+    date: false,
+    time: false,
+    menu: false,
+    pay: false,
+    confirmation: false,
+  })
+  const [counterNoPersons, setCounterNoPersons] = useState<number>(1)
+  const [selectedDate, setSelectedDate] = useState<MaterialUiPickersDate>()
+  const [selectedTime, setSelectedTime] = useState<MaterialUiPickersDate>()
+  const [orderItems, setOrderItems] = useState<OrderItem[]>()
+  const [totalItems, setTotalItems] = useState<number>()
 
   useEffect(() => {
     setBookingStartDate(
@@ -70,14 +91,29 @@ const BookTable = ({}) => {
     )
   }, [booking])
 
-  const [isSectionOpen, setIsSectionOpen] = useState<Sections>({
-    noPersons: true,
-    date: false,
-    time: false,
-    menu: false,
-    pay: false,
-    confirmation: false,
-  })
+  useEffect(() => {
+    if (menuItems) {
+      setOrderItems(
+        menuItems.data?.menuItems.map((menuItem) => ({
+          id: menuItem.id,
+          price: menuItem.price,
+          name: menuItem.name,
+        }))
+      )
+    }
+  }, [menuItems])
+
+  const handleOrderItemsChange = (itemId: number, amount: number) => {
+    setOrderItems((prevState) => {
+      const itemIndex = prevState?.findIndex((item) => item.id === itemId)
+      if (itemIndex) {
+        const newState = [...(prevState || [])]
+        newState[itemIndex].amount = amount > 0 ? amount : undefined
+        return newState
+      }
+      return prevState
+    })
+  }
 
   const handleChange = (key1: keyof Sections, key2: keyof Sections) => {
     setIsSectionOpen((prevState) => ({
@@ -87,63 +123,61 @@ const BookTable = ({}) => {
     }))
   }
 
-  const [counterNoPersons, setCounterNoPersons] = useState<number>(1)
-  const [selectedDate, setSelectedDate] = useState<MaterialUiPickersDate>()
-  const [selectedTime, setSelectedTime] = useState<MaterialUiPickersDate>()
-
-  const handleDateChange = (date: MaterialUiPickersDate) => {
-    setSelectedDate(date)
-  }
-
-  const handleTimeChange = (time: MaterialUiPickersDate) => {
-    setSelectedTime(time)
-  }
-
   const filterMenuItems = menuItems.data?.menuItems
-  const starters = filterMenuItems?.filter(
-    (menuItem) => menuItem.category === 'starter'
-  )
-  const mainCourses = filterMenuItems?.filter(
-    (menuItem) => menuItem.category === 'main_course'
-  )
-  const sides = filterMenuItems?.filter(
-    (menuItem) => menuItem.category === 'side_orders'
-  )
-  const deserts = filterMenuItems?.filter(
-    (menuItem) => menuItem.category === 'desert'
-  )
-  const alcoholics = filterMenuItems?.filter(
-    (menuItem) => menuItem.category === 'alcoholic'
-  )
-  const nonalcoholics = filterMenuItems?.filter(
-    (menuItem) => menuItem.category === 'nonalcoholic'
-  )
-  const table = (
-    object: MenuItem,
-    index: string | number | null | undefined
-  ) => (
-    <Table key={index}>
-      <TableBody>
-        <TableRow>
-          <TableDataCell>
-            <b>{object.name}</b>
-          </TableDataCell>
-          <TableDataCell align="left">{object.description}</TableDataCell>
-          <TableDataCell align="right">
-            <Counter
-              minVal={0}
-              maxVal={8}
-              initialVal={0}
-              executeOnChange={() => console.log(object.id)}
-            />
-          </TableDataCell>
-          <TableDataCell align="right">
-            <b>{object.price}</b>DKK
-          </TableDataCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  )
+
+  const createMenuSection = (category: string) =>
+    filterMenuItems
+      ?.filter((menuItem) => menuItem.category === category)
+      .map((element, index) => (
+        <React.Fragment key={index}>
+          <ListItem multiline>
+            <ListTextGroup>
+              <ListText styledAs="labelBold">{element.name}</ListText>
+              <ListText styledAs="body">{element.description}</ListText>
+            </ListTextGroup>
+          </ListItem>
+          <ListItem divider>
+            <ListText>
+              <Counter
+                minVal={0}
+                maxVal={8}
+                initialVal={0}
+                executeOnChange={(value) =>
+                  handleOrderItemsChange(element.id, value)
+                }
+              />
+            </ListText>
+            <ListText styledAs="labelBold">{element.price} DKK</ListText>
+          </ListItem>
+        </React.Fragment>
+      ))
+
+  const menuSections: MenuSectionType[] = [
+    {
+      header: 'Starters',
+      dbKey: 'starter',
+    },
+    {
+      header: 'Main Course',
+      dbKey: 'main_course',
+    },
+    {
+      header: 'Sides',
+      dbKey: 'side_orders',
+    },
+    {
+      header: 'Desert',
+      dbKey: 'desert',
+    },
+    {
+      header: 'Alcoholic beverages',
+      dbKey: 'alcoholic',
+    },
+    {
+      header: 'Nonalcoholic beverages',
+      dbKey: 'nonalcoholic',
+    },
+  ]
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -172,7 +206,6 @@ const BookTable = ({}) => {
                   isOpen={isSectionOpen.noPersons}
                   heading="Guests"
                 >
-                  <p>select number of guests in dropdown</p>
                   <Counter
                     minVal={1}
                     maxVal={8}
@@ -195,7 +228,6 @@ const BookTable = ({}) => {
                     isOpen={isSectionOpen.date}
                     heading="Date"
                   >
-                    <p>select date from date picker</p>
                     <DatePicker
                       autoOk
                       variant="static"
@@ -205,7 +237,7 @@ const BookTable = ({}) => {
                       maxDate={bookingEndDate}
                       openTo="date"
                       value={selectedDate}
-                      onChange={(d) => handleDateChange(d)}
+                      onChange={(d) => setSelectedDate(d)}
                     />
                     <ButtonStack align="right">
                       <Button
@@ -215,18 +247,14 @@ const BookTable = ({}) => {
                       >
                         Go Back
                       </Button>
-                      {selectedDate === undefined ? (
-                        <Button type="button" disabled>
-                          Continue
-                        </Button>
-                      ) : (
-                        <Button
-                          type="button"
-                          onClick={() => handleChange('date', 'time')}
-                        >
-                          Continue
-                        </Button>
-                      )}
+
+                      <Button
+                        type="button"
+                        onClick={() => handleChange('date', 'time')}
+                        disabled={selectedDate === undefined}
+                      >
+                        Continue
+                      </Button>
                     </ButtonStack>
                   </Accordion>
 
@@ -235,14 +263,13 @@ const BookTable = ({}) => {
                     isOpen={isSectionOpen.time}
                     heading="Time"
                   >
-                    <p>select time from outlined buttons</p>
                     <TimePicker
                       autoOk
                       variant="static"
                       openTo="hours"
                       initialFocusedDate={new Date().setHours(12, 0, 0, 0)}
                       value={selectedTime}
-                      onChange={(t) => handleTimeChange(t)}
+                      onChange={(t) => setSelectedTime(t)}
                     />
                     <ButtonStack align="right">
                       <Button
@@ -252,40 +279,23 @@ const BookTable = ({}) => {
                       >
                         Go Back
                       </Button>
-                      {selectedTime === undefined ? (
-                        <Button type="button" disabled>
-                          Continue
-                        </Button>
-                      ) : (
-                        <Button
-                          type="button"
-                          onClick={() => handleChange('time', 'menu')}
-                        >
-                          Continue
-                        </Button>
-                      )}
+                      <Button
+                        type="button"
+                        onClick={() => handleChange('time', 'menu')}
+                        disabled={selectedTime === undefined}
+                      >
+                        Continue
+                      </Button>
                     </ButtonStack>
                   </Accordion>
                 </MuiPickersUtilsProvider>
                 <Accordion disabled isOpen={isSectionOpen.menu} heading="Menu">
-                  <Text styledAs="sectionHeadline">Starters</Text>
-                  {starters?.map((starter, index) => table(starter, index))}
-                  <Text styledAs="sectionHeadline">Main Course</Text>
-                  {mainCourses?.map((mainCourse, index) =>
-                    table(mainCourse, index)
-                  )}
-                  <Text styledAs="sectionHeadline">Sides</Text>
-                  {sides?.map((side, index) => table(side, index))}
-                  <Text styledAs="sectionHeadline">Desert</Text>
-                  {deserts?.map((desert, index) => table(desert, index))}
-                  <Text styledAs="sectionHeadline">Alcoholic beverages</Text>
-                  {alcoholics?.map((alcoholic, index) =>
-                    table(alcoholic, index)
-                  )}
-                  <Text styledAs="sectionHeadline">Nonalcoholic beverages</Text>
-                  {nonalcoholics?.map((nonalcoholic, index) =>
-                    table(nonalcoholic, index)
-                  )}
+                  {menuSections.map((item, index) => (
+                    <React.Fragment key={index}>
+                      <Text styledAs="sectionHeadline">{item.header}</Text>
+                      {createMenuSection(item.dbKey)}
+                    </React.Fragment>
+                  ))}
                   <ButtonStack align="right">
                     <Button
                       type="button"
@@ -296,15 +306,95 @@ const BookTable = ({}) => {
                     </Button>
                     <Button
                       type="button"
-                      onClick={() => handleChange('menu', 'pay')}
+                      onClick={() => {
+                        handleChange('menu', 'pay')
+                        let totalAmount = 0
+                        orderItems
+                          ?.filter((item) => item.amount)
+                          .forEach((item) => {
+                            if (item.amount) {
+                              totalAmount =
+                                totalAmount + item.price * item.amount
+                            }
+                          })
+                        setTotalItems(totalAmount)
+                      }}
+                      disabled={
+                        orderItems &&
+                        orderItems?.filter((item) => item.amount).length <= 0
+                      }
                     >
                       Continue
                     </Button>
                   </ButtonStack>
                 </Accordion>
 
-                <Accordion disabled isOpen={isSectionOpen.pay} heading="Pay">
-                  <p>A BUTTON PAY</p>
+                <Accordion
+                  disabled
+                  isOpen={isSectionOpen.pay}
+                  heading="Summary & Pay"
+                >
+                  <ListItem multiline divider>
+                    <ListTextGroup>
+                      <ListText styledAs="labelBold">Guests</ListText>
+                      <ListText styledAs="body">{counterNoPersons}</ListText>
+                    </ListTextGroup>
+                  </ListItem>
+                  <ListItem multiline divider>
+                    <ListTextGroup>
+                      <ListText styledAs="labelBold">Selected date</ListText>
+                      <ListText styledAs="body">
+                        {moment(selectedDate).format('DD-MM-YYYY')}
+                      </ListText>
+                    </ListTextGroup>
+                  </ListItem>
+                  <ListItem multiline divider>
+                    <ListTextGroup>
+                      <ListText styledAs="labelBold">Selected time</ListText>
+                      <ListText styledAs="body">
+                        {moment(selectedTime).format('HH:MM')}
+                      </ListText>
+                    </ListTextGroup>
+                  </ListItem>
+                  <ListItem>
+                    <ListTextGroup>
+                      <ListText styledAs="labelBold">Ordered items</ListText>
+                    </ListTextGroup>
+                  </ListItem>
+                  {orderItems
+                    ?.filter((item) => item.amount)
+                    .map((item) => (
+                      <ListItem divider key={item.id}>
+                        <ListTextGroup>
+                          <ListText styledAs="body">
+                            <b>{item.name}</b> x {item.amount} ={' '}
+                            {item.amount && item.price * item.amount}DKK
+                          </ListText>
+                        </ListTextGroup>
+                      </ListItem>
+                    ))}
+                  <ListItem multiline divider>
+                    <ListTextGroup>
+                      <ListText styledAs="labelBold">Total</ListText>
+                      <ListText styledAs="labelBold">{totalItems} DKK</ListText>
+                    </ListTextGroup>
+                  </ListItem>
+
+                  <ButtonStack align="right">
+                    <Button
+                      type="button"
+                      onClick={() => handleChange('pay', 'menu')}
+                      variation="secondary"
+                    >
+                      Go Back
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => handleChange('pay', 'confirmation')}
+                    >
+                      PAY
+                    </Button>
+                  </ButtonStack>
                 </Accordion>
               </Form>
             )}
