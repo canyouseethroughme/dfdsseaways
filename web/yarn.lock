@@ -576,6 +576,11 @@
   resolved "https://registry.yarnpkg.com/@dfds-ui/colors/-/colors-0.8.38.tgz#febfb178e03e27c2724aa56d2a14b699104fc387"
   integrity sha512-Tn+P8CypWvYUlRdx4GtzezVW/bT81HLdyZdrXI//UsdJi9Bp+qoabJefNnXkLO/Q119cVHYnw8kb/jAA3e3Q3A==
 
+"@dfds-ui/colors@0.8.41":
+  version "0.8.41"
+  resolved "https://registry.yarnpkg.com/@dfds-ui/colors/-/colors-0.8.41.tgz#6b19e687e1f2c623c10ee3a806e390ebc9f59b4d"
+  integrity sha512-VLQMoy1zGb25cCrgVR5abmpktzPsHwuqqX9kc7bnRFXF/lBLczE/0ZjhLIpDyxd7oVJE46n6NVhpk9C2a8eZ9w==
+
 "@dfds-ui/fonts@0.8.38":
   version "0.8.38"
   resolved "https://registry.yarnpkg.com/@dfds-ui/fonts/-/fonts-0.8.38.tgz#8f761fcfbf7203285ff8df64c8c3a144076c0248"
@@ -641,6 +646,11 @@
   resolved "https://registry.yarnpkg.com/@dfds-ui/spacing/-/spacing-0.8.38.tgz#4077c148cee66609b8f0e17d1ea3ea45ff5a611d"
   integrity sha512-LQrXl+ADT5xLGYsCeJL99lOnq3T0EJbm9tiM1Lycx2j9tUwISALuh5+rjs6ZX8OMhj9C/1k2tf9h0fisBpJiuQ==
 
+"@dfds-ui/spacing@0.8.41":
+  version "0.8.41"
+  resolved "https://registry.yarnpkg.com/@dfds-ui/spacing/-/spacing-0.8.41.tgz#05b59c9dd303ff4d922ff3b7c72584824a83221d"
+  integrity sha512-4s9rgdhxXxfI0yIGTbakSpsQctPFtSw738elVJxdAIRKft8i3wrNJ5H3Qu0dXtlTRwggreEdQ8j8Scv8oNcysA==
+
 "@dfds-ui/theme@0.8.38":
   version "0.8.38"
   resolved "https://registry.yarnpkg.com/@dfds-ui/theme/-/theme-0.8.38.tgz#1ba324663672fc0b615e33b38962d2e3997c9ea7"
@@ -651,12 +661,29 @@
     "@types/lodash.throttle" "^4.1.6"
     lodash.throttle "^4.1.1"
 
+"@dfds-ui/theme@0.8.41":
+  version "0.8.41"
+  resolved "https://registry.yarnpkg.com/@dfds-ui/theme/-/theme-0.8.41.tgz#6b80269d0a9ceb366494168b35b13e5a0249fe5c"
+  integrity sha512-Ey0v6gRVrJ3lkMRWUJ0XXzTN+Jy2uRkh7jclYsvlN8ye2I4bwhxh0FGlzrN1irXs5//GXt58Uh0EaRbtrlXcyw==
+  dependencies:
+    "@dfds-ui/colors" "0.8.41"
+    "@dfds-ui/spacing" "0.8.41"
+    "@types/lodash.throttle" "^4.1.6"
+    lodash.throttle "^4.1.1"
+
 "@dfds-ui/typography@0.8.38":
   version "0.8.38"
   resolved "https://registry.yarnpkg.com/@dfds-ui/typography/-/typography-0.8.38.tgz#f7b2b1a18192e07f57df8fc8b3d111e300f3356c"
   integrity sha512-SvcE0KoOJVA5S9473cXvi6F9+hCdJx9gEuTE7zfcRjXZujjOlU/1eorYXrFyincZOhgRONbhQckh6DqtBEP1AQ==
   dependencies:
     "@dfds-ui/theme" "0.8.38"
+
+"@dfds-ui/typography@^0.8.41":
+  version "0.8.41"
+  resolved "https://registry.yarnpkg.com/@dfds-ui/typography/-/typography-0.8.41.tgz#f2394458b3af83fc4a828a18776775e817787866"
+  integrity sha512-1HmAaPGbcAJR19d73e3GwEO19Di93Ra8u0/OCZ2HqXwrQbTLJmqIJrm/g8oGTZIuP8sWUHP9/qtY3MFK2Kytvg==
+  dependencies:
+    "@dfds-ui/theme" "0.8.41"
 
 "@emotion/cache@^10.0.27", "@emotion/cache@^10.0.9":
   version "10.0.29"

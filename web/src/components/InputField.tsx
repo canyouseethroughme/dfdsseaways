@@ -13,7 +13,7 @@ type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   name: string
 }
 
-const inputStyle = (error: string) => css`
+const inputStyle = (error?: string) => css`
   ${error
     ? css`
         margin-bottom: 0;

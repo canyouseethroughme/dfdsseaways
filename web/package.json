@@ -14,6 +14,7 @@
     "@dfds-ui/forms": "^0.8.38",
     "@dfds-ui/modal": "^0.8.38",
     "@dfds-ui/react-components": "0.8.38",
+    "@dfds-ui/typography": "^0.8.41",
     "@emotion/core": "10.0.27",
     "@emotion/styled": "10.0.27",
     "@material-ui/pickers": "^3.2.10",

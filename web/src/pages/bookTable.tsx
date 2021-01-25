@@ -1,5 +1,9 @@
-import React, { useState } from 'react'
-import { useMeQuery } from '../generated/graphql'
+import React, { useEffect, useState } from 'react'
+import {
+  useMeQuery,
+  useMenuItemsQuery,
+  useBookingQuery,
+} from '../generated/graphql'
 import { PageLayout } from '../components/PageLayout'
 import {
   Label,
@@ -9,7 +13,12 @@ import {
   Counter,
   Button,
   ButtonStack,
+  Table,
+  TableBody,
+  TableDataCell,
+  TableRow,
 } from '@dfds-ui/react-components'
+import { Text } from '@dfds-ui/typography'
 import { useRouter } from 'next/router'
 import { css } from '@emotion/core'
 import { Form, Formik } from 'formik'
@@ -20,6 +29,8 @@ import {
 } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
+import moment from 'moment'
+import menu from '@dfds-ui/react-components/menu/Menu'
 
 interface Sections {
   noPersons: boolean
@@ -30,9 +41,34 @@ interface Sections {
   confirmation: boolean
 }
 
+interface MenuItem {
+  id: number
+  name: string
+  description: string
+  price: number
+}
+
 const BookTable = ({}) => {
   const router = useRouter()
   const [meData] = useMeQuery()
+  const [booking] = useBookingQuery()
+  const [menuItems] = useMenuItemsQuery()
+
+  const [bookingStartDate, setBookingStartDate] = useState<string>()
+  const [bookingEndDate, setBookingEndDate] = useState<string>()
+
+  useEffect(() => {
+    setBookingStartDate(
+      moment(
+        new Date(parseInt(booking.data?.booking?.booking?.startDate!))
+      ).format('YYYY-MM-DD')
+    )
+    setBookingEndDate(
+      moment(
+        new Date(parseInt(booking.data?.booking?.booking?.endDate!))
+      ).format('YYYY-MM-DD')
+    )
+  }, [booking])
 
   const [isSectionOpen, setIsSectionOpen] = useState<Sections>({
     noPersons: true,
@@ -43,10 +79,6 @@ const BookTable = ({}) => {
     confirmation: false,
   })
 
-  const [counterNoPersons, setCounterNoPersons] = useState<number>(1)
-  const [selectedDate, setSelectedDate] = useState<MaterialUiPickersDate>()
-  const [selectedTime, setSelectedTime] = useState<MaterialUiPickersDate>()
-
   const handleChange = (key1: keyof Sections, key2: keyof Sections) => {
     setIsSectionOpen((prevState) => ({
       ...prevState,
@@ -55,6 +87,10 @@ const BookTable = ({}) => {
     }))
   }
 
+  const [counterNoPersons, setCounterNoPersons] = useState<number>(1)
+  const [selectedDate, setSelectedDate] = useState<MaterialUiPickersDate>()
+  const [selectedTime, setSelectedTime] = useState<MaterialUiPickersDate>()
+
   const handleDateChange = (date: MaterialUiPickersDate) => {
     setSelectedDate(date)
   }
@@ -62,8 +98,52 @@ const BookTable = ({}) => {
   const handleTimeChange = (time: MaterialUiPickersDate) => {
     setSelectedTime(time)
   }
-  // console.log('selectedDate', selectedDate)
-  // console.log('counterNoPersons', counterNoPersons)
+
+  const filterMenuItems = menuItems.data?.menuItems
+  const starters = filterMenuItems?.filter(
+    (menuItem) => menuItem.category === 'starter'
+  )
+  const mainCourses = filterMenuItems?.filter(
+    (menuItem) => menuItem.category === 'main_course'
+  )
+  const sides = filterMenuItems?.filter(
+    (menuItem) => menuItem.category === 'side_orders'
+  )
+  const deserts = filterMenuItems?.filter(
+    (menuItem) => menuItem.category === 'desert'
+  )
+  const alcoholics = filterMenuItems?.filter(
+    (menuItem) => menuItem.category === 'alcoholic'
+  )
+  const nonalcoholics = filterMenuItems?.filter(
+    (menuItem) => menuItem.category === 'nonalcoholic'
+  )
+  const table = (
+    object: MenuItem,
+    index: string | number | null | undefined
+  ) => (
+    <Table key={index}>
+      <TableBody>
+        <TableRow>
+          <TableDataCell>
+            <b>{object.name}</b>
+          </TableDataCell>
+          <TableDataCell align="left">{object.description}</TableDataCell>
+          <TableDataCell align="right">
+            <Counter
+              minVal={0}
+              maxVal={8}
+              initialVal={0}
+              executeOnChange={() => console.log(object.id)}
+            />
+          </TableDataCell>
+          <TableDataCell align="right">
+            <b>{object.price}</b>DKK
+          </TableDataCell>
+        </TableRow>
+      </TableBody>
+    </Table>
+  )
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -119,11 +199,14 @@ const BookTable = ({}) => {
                     <DatePicker
                       autoOk
                       variant="static"
+                      disablePast
+                      initialFocusedDate={bookingStartDate}
+                      minDate={bookingStartDate}
+                      maxDate={bookingEndDate}
                       openTo="date"
                       value={selectedDate}
                       onChange={(d) => handleDateChange(d)}
                     />
-
                     <ButtonStack align="right">
                       <Button
                         type="button"
@@ -155,9 +238,9 @@ const BookTable = ({}) => {
                     <p>select time from outlined buttons</p>
                     <TimePicker
                       autoOk
-                      ampm={false}
                       variant="static"
                       openTo="hours"
+                      initialFocusedDate={new Date().setHours(12, 0, 0, 0)}
                       value={selectedTime}
                       onChange={(t) => handleTimeChange(t)}
                     />
@@ -185,12 +268,24 @@ const BookTable = ({}) => {
                   </Accordion>
                 </MuiPickersUtilsProvider>
                 <Accordion disabled isOpen={isSectionOpen.menu} heading="Menu">
-                  <p>menu is divided on categories</p>
-                  <p>
-                    in every category there are different types of dishes and
-                    every dish has an amount input dropdown and price in the end
-                    of the row
-                  </p>
+                  <Text styledAs="sectionHeadline">Starters</Text>
+                  {starters?.map((starter, index) => table(starter, index))}
+                  <Text styledAs="sectionHeadline">Main Course</Text>
+                  {mainCourses?.map((mainCourse, index) =>
+                    table(mainCourse, index)
+                  )}
+                  <Text styledAs="sectionHeadline">Sides</Text>
+                  {sides?.map((side, index) => table(side, index))}
+                  <Text styledAs="sectionHeadline">Desert</Text>
+                  {deserts?.map((desert, index) => table(desert, index))}
+                  <Text styledAs="sectionHeadline">Alcoholic beverages</Text>
+                  {alcoholics?.map((alcoholic, index) =>
+                    table(alcoholic, index)
+                  )}
+                  <Text styledAs="sectionHeadline">Nonalcoholic beverages</Text>
+                  {nonalcoholics?.map((nonalcoholic, index) =>
+                    table(nonalcoholic, index)
+                  )}
                   <ButtonStack align="right">
                     <Button
                       type="button"

@@ -219,6 +219,23 @@ export type LoginMutation = (
   ) }
 );
 
+export type BookingQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BookingQuery = (
+  { __typename?: 'Query' }
+  & { booking?: Maybe<(
+    { __typename?: 'BookingResponse' }
+    & { errors?: Maybe<Array<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'message'>
+    )>>, booking?: Maybe<(
+      { __typename?: 'Booking' }
+      & Pick<Booking, 'userId' | 'startDate' | 'endDate'>
+    )> }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -272,6 +289,24 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const BookingDocument = gql`
+    query Booking {
+  booking {
+    errors {
+      message
+    }
+    booking {
+      userId
+      startDate
+      endDate
+    }
+  }
+}
+    `;
+
+export function useBookingQuery(options: Omit<Urql.UseQueryArgs<BookingQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<BookingQuery>({ query: BookingDocument, ...options });
 };
 export const MeDocument = gql`
     query Me {

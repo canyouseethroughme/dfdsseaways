@@ -22,6 +22,7 @@ import {
   TableDataCell,
 } from '@dfds-ui/react-components'
 import { Modal } from '@dfds-ui/modal'
+import { format } from 'date-fns'
 
 const Reservations = ({}) => {
   const [meData] = useMeQuery()
@@ -83,29 +84,22 @@ const Reservations = ({}) => {
             <Table isInteractive>
               <TableHead>
                 <TableRow>
-                  <TableHeaderCell>Reservation ID</TableHeaderCell>
-                  <TableHeaderCell>Date & Time</TableHeaderCell>
+                  <TableHeaderCell>Reservation No.</TableHeaderCell>
+                  <TableHeaderCell align="center">Date & Time</TableHeaderCell>
                   <TableHeaderCell>No. of persons</TableHeaderCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {reservationsData.data?.reservations.map(
                   (reservation, index) => {
-                    let date = new Date(parseInt(reservation.dateAndTime))
                     return (
                       <TableRow key={index}>
                         <TableDataCell>{reservation.id}</TableDataCell>
-                        <TableDataCell>
-                          {date.getDate() +
-                            '-' +
-                            (date.getMonth() + 1) +
-                            '-' +
-                            date.getFullYear() +
-                            ' & ' +
-                            date.getHours() +
-                            ':' +
-                            date.getMinutes() +
-                            0}
+                        <TableDataCell align="center">
+                          {format(
+                            new Date(parseInt(reservation.dateAndTime)),
+                            'dd/MM/yyyy @ HH:mm'
+                          )}
                         </TableDataCell>
                         <TableDataCell>{reservation.noPersons}</TableDataCell>
                       </TableRow>

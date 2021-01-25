@@ -1,0 +1,12 @@
+query Booking {
+  booking {
+    errors {
+      message
+    }
+    booking {
+      userId
+      startDate
+      endDate
+    }
+  }
+}
