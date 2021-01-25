@@ -52,13 +52,13 @@ const main = async () => {
   });
 
   // SEEDS
-  //   await userSeeds();
-  //   await menuItemSeeds();
-  //   await tableSeeds();
-  //   await bookingSeeds();
-  //   await reservationSeeds();
-  //   await orderSeeds();
-  //   await orderItemSeeds();
+  // await userSeeds();
+  // await menuItemSeeds();
+  // await tableSeeds();
+  // await bookingSeeds();
+  // await reservationSeeds();
+  // await orderSeeds();
+  // await orderItemSeeds();
   /////////////////////////
 
   const app = express();
