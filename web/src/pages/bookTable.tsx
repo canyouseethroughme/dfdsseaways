@@ -13,10 +13,6 @@ import {
   Counter,
   Button,
   ButtonStack,
-  Table,
-  TableBody,
-  TableDataCell,
-  TableRow,
   ListItem,
   ListText,
   ListTextGroup,
@@ -147,7 +143,9 @@ const BookTable = ({}) => {
                 }
               />
             </ListText>
-            <ListText styledAs="labelBold">{element.price} DKK</ListText>
+            <FlexBox itemsFlexEnd>
+              <ListText styledAs="labelBold">{element.price} DKK</ListText>
+            </FlexBox>
           </ListItem>
         </React.Fragment>
       ))
@@ -392,7 +390,7 @@ const BookTable = ({}) => {
                       type="button"
                       onClick={() => handleChange('pay', 'confirmation')}
                     >
-                      PAY
+                      Agree & PAY
                     </Button>
                   </ButtonStack>
                 </Accordion>

@@ -20,9 +20,20 @@ import {
   TableRow,
   TableHeaderCell,
   TableDataCell,
+  Counter,
+  ListItem,
+  ListText,
+  ListTextGroup,
 } from '@dfds-ui/react-components'
+import { Text } from '@dfds-ui/typography'
 import { Modal } from '@dfds-ui/modal'
 import { format } from 'date-fns'
+import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
+
+interface MenuSectionType {
+  header: string
+  dbKey: string
+}
 
 const Reservations = ({}) => {
   const [meData] = useMeQuery()
@@ -30,6 +41,55 @@ const Reservations = ({}) => {
   const [reservationsData] = useReservationsQuery()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const router = useRouter()
+
+  const filterMenuItems = menuItemsData.data?.menuItems
+
+  const createMenuSection = (category: string) =>
+    filterMenuItems
+      ?.filter((menuItem) => menuItem.category === category)
+      .map((element, index) => (
+        <React.Fragment key={index}>
+          <ListItem multiline>
+            <ListTextGroup>
+              <ListText styledAs="labelBold">{element.name}</ListText>
+              <ListText styledAs="body">{element.description}</ListText>
+            </ListTextGroup>
+          </ListItem>
+          <ListItem divider>
+            <ListText></ListText>
+            <FlexBox itemsFlexEnd>
+              <ListText styledAs="labelBold">{element.price} DKK</ListText>
+            </FlexBox>
+          </ListItem>
+        </React.Fragment>
+      ))
+
+  const menuSections: MenuSectionType[] = [
+    {
+      header: 'Starters',
+      dbKey: 'starter',
+    },
+    {
+      header: 'Main Course',
+      dbKey: 'main_course',
+    },
+    {
+      header: 'Sides',
+      dbKey: 'side_orders',
+    },
+    {
+      header: 'Desert',
+      dbKey: 'desert',
+    },
+    {
+      header: 'Alcoholic beverages',
+      dbKey: 'alcoholic',
+    },
+    {
+      header: 'Nonalcoholic beverages',
+      dbKey: 'nonalcoholic',
+    },
+  ]
 
   return (
     <PageLayout
@@ -54,7 +114,7 @@ const Reservations = ({}) => {
               css={css`
                 z-index: 1000;
               `}
-              heading="Fullscreen for s and m"
+              heading="Menu"
               isOpen={openModal}
               shouldCloseOnEsc={true}
               onRequestClose={() => setOpenModal(false)}
@@ -67,14 +127,12 @@ const Reservations = ({}) => {
               }}
             >
               <div>
-                {menuItemsData.data?.menuItems.map((menuItem, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                      <p>{menuItem.name}</p>
-                      <p>{menuItem.price}</p>
-                    </React.Fragment>
-                  )
-                })}
+                {menuSections.map((item, index) => (
+                  <React.Fragment key={index}>
+                    <Text styledAs="sectionHeadline">{item.header}</Text>
+                    {createMenuSection(item.dbKey)}
+                  </React.Fragment>
+                ))}
               </div>
             </Modal>
           </Card>
