@@ -3,6 +3,10 @@ import {
   useMeQuery,
   useMenuItemsQuery,
   useBookingQuery,
+  useCreateReservationMutation,
+  useCreateOrderMutation,
+  useCreateOrderItemsMutation,
+  OrderItemInput,
 } from '../generated/graphql'
 import { PageLayout } from '../components/PageLayout'
 import {
@@ -57,6 +61,9 @@ const BookTable = ({}) => {
   const [meData] = useMeQuery()
   const [booking] = useBookingQuery()
   const [menuItems] = useMenuItemsQuery()
+  const [, createReservation] = useCreateReservationMutation()
+  const [, createOrder] = useCreateOrderMutation()
+  const [, createOrderItems] = useCreateOrderItemsMutation()
 
   const [bookingStartDate, setBookingStartDate] = useState<string>()
   const [bookingEndDate, setBookingEndDate] = useState<string>()
@@ -194,8 +201,39 @@ const BookTable = ({}) => {
           `}
         >
           <Formik
-            initialValues={{ noPersons: counterNoPersons, dateAndTime: '' }}
-            onSubmit={async (values, { setErrors }) => {}}
+            initialValues={{}}
+            onSubmit={async () => {
+              let responseOrder
+              let responseOrderItem
+              const responseReservation = await createReservation({
+                dateAndTime: `${moment(selectedDate).format(
+                  'YYYY-MM-DD'
+                )}T${moment(selectedTime).format('HH:MM')}:00.000Z`,
+                tableId: 2,
+                noPersons: counterNoPersons,
+              })
+
+              if (responseReservation.data?.createReservation.id) {
+                responseOrder = await createOrder({
+                  reservationId: responseReservation.data?.createReservation.id,
+                })
+              }
+              if (responseOrder?.data?.createOrder.id && orderItems) {
+                const orderId = responseOrder.data.createOrder.id
+                const orderItemsInput: OrderItemInput[] = orderItems
+                  .filter((item) => item.amount)
+                  .map((item) => ({
+                    orderId,
+                    menuItemId: item.id,
+                    price: item.price,
+                    amount: Number(item.amount),
+                  }))
+
+                responseOrderItem = await createOrderItems({
+                  orderItems: orderItemsInput,
+                })
+              }
+            }}
           >
             {({ isSubmitting }) => (
               <Form>
@@ -387,7 +425,8 @@ const BookTable = ({}) => {
                       Go Back
                     </Button>
                     <Button
-                      type="button"
+                      type="submit"
+                      submitting={isSubmitting}
                       onClick={() => handleChange('pay', 'confirmation')}
                     >
                       Agree & PAY

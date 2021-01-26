@@ -135,6 +135,7 @@ export type Mutation = {
   createReservation: Reservation;
   updateReservation?: Maybe<Reservation>;
   deleteReservation: Scalars['Boolean'];
+  createOrderItems: Array<OrderItem>;
   createOrderItem: OrderItem;
   updateOrderItem?: Maybe<OrderItem>;
   deleteOrderItem: Scalars['Boolean'];
@@ -162,6 +163,11 @@ export type MutationUpdateReservationArgs = {
 
 export type MutationDeleteReservationArgs = {
   id: Scalars['Float'];
+};
+
+
+export type MutationCreateOrderItemsArgs = {
+  orderItems: Array<OrderItemInput>;
 };
 
 
@@ -200,6 +206,13 @@ export type MutationLoginArgs = {
 };
 
 
+export type OrderItemInput = {
+  orderId: Scalars['Float'];
+  menuItemId: Scalars['Float'];
+  price: Scalars['Int'];
+  amount: Scalars['Int'];
+};
+
 export type LoginMutationVariables = Exact<{
   bookingId: Scalars['Float'];
 }>;
@@ -216,6 +229,47 @@ export type LoginMutation = (
       { __typename?: 'FieldError' }
       & Pick<FieldError, 'field' | 'message'>
     )>> }
+  ) }
+);
+
+export type CreateOrderMutationVariables = Exact<{
+  reservationId: Scalars['Float'];
+}>;
+
+
+export type CreateOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrder: (
+    { __typename?: 'Order' }
+    & Pick<Order, 'id' | 'reservationId'>
+  ) }
+);
+
+export type CreateOrderItemsMutationVariables = Exact<{
+  orderItems: Array<OrderItemInput>;
+}>;
+
+
+export type CreateOrderItemsMutation = (
+  { __typename?: 'Mutation' }
+  & { createOrderItems: Array<(
+    { __typename?: 'OrderItem' }
+    & Pick<OrderItem, 'orderId' | 'menuItemId' | 'price' | 'amount'>
+  )> }
+);
+
+export type CreateReservationMutationVariables = Exact<{
+  noPersons: Scalars['Float'];
+  dateAndTime: Scalars['DateTime'];
+  tableId: Scalars['Float'];
+}>;
+
+
+export type CreateReservationMutation = (
+  { __typename?: 'Mutation' }
+  & { createReservation: (
+    { __typename?: 'Reservation' }
+    & Pick<Reservation, 'id' | 'dateAndTime' | 'noPersons' | 'tableId'>
   ) }
 );
 
@@ -289,6 +343,46 @@ export const LoginDocument = gql`
 
 export function useLoginMutation() {
   return Urql.useMutation<LoginMutation, LoginMutationVariables>(LoginDocument);
+};
+export const CreateOrderDocument = gql`
+    mutation CreateOrder($reservationId: Float!) {
+  createOrder(reservationId: $reservationId) {
+    id
+    reservationId
+  }
+}
+    `;
+
+export function useCreateOrderMutation() {
+  return Urql.useMutation<CreateOrderMutation, CreateOrderMutationVariables>(CreateOrderDocument);
+};
+export const CreateOrderItemsDocument = gql`
+    mutation CreateOrderItems($orderItems: [OrderItemInput!]!) {
+  createOrderItems(orderItems: $orderItems) {
+    orderId
+    menuItemId
+    price
+    amount
+  }
+}
+    `;
+
+export function useCreateOrderItemsMutation() {
+  return Urql.useMutation<CreateOrderItemsMutation, CreateOrderItemsMutationVariables>(CreateOrderItemsDocument);
+};
+export const CreateReservationDocument = gql`
+    mutation CreateReservation($noPersons: Float!, $dateAndTime: DateTime!, $tableId: Float!) {
+  createReservation(tableId: $tableId, noPersons: $noPersons, dateAndTime: $dateAndTime) {
+    id
+    dateAndTime
+    noPersons
+    tableId
+  }
+}
+    `;
+
+export function useCreateReservationMutation() {
+  return Urql.useMutation<CreateReservationMutation, CreateReservationMutationVariables>(CreateReservationDocument);
 };
 export const BookingDocument = gql`
     query Booking {

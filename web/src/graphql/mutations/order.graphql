@@ -1,0 +1,6 @@
+mutation CreateOrder($reservationId: Float!) {
+  createOrder(reservationId: $reservationId) {
+    id
+    reservationId
+  }
+}

@@ -20,7 +20,6 @@ import {
   TableRow,
   TableHeaderCell,
   TableDataCell,
-  Counter,
   ListItem,
   ListText,
   ListTextGroup,
