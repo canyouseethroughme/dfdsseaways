@@ -1,3 +1,4 @@
+/** @jsx jsx */
 import React, { useEffect, useState } from 'react'
 import {
   useMeQuery,
@@ -23,7 +24,7 @@ import {
 } from '@dfds-ui/react-components'
 import { Text } from '@dfds-ui/typography'
 import { useRouter } from 'next/router'
-import { css } from '@emotion/core'
+import { css, jsx } from '@emotion/core'
 import { Form, Formik } from 'formik'
 import {
   DatePicker,
@@ -56,6 +57,15 @@ interface OrderItem {
   name: string
 }
 
+const containerCentered = css`
+  width: 100%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-content: center;
+  justify-items: center;
+`
+
 const BookTable = ({}) => {
   const router = useRouter()
   const [meData] = useMeQuery()
@@ -63,8 +73,8 @@ const BookTable = ({}) => {
   const [menuItems] = useMenuItemsQuery()
   const [, createReservation] = useCreateReservationMutation()
   const [, createOrder] = useCreateOrderMutation()
-  const [, createOrderItems] = useCreateOrderItemsMutation()
-
+  const [asd, createOrderItems] = useCreateOrderItemsMutation()
+  console.log(asd)
   const [bookingStartDate, setBookingStartDate] = useState<string>()
   const [bookingEndDate, setBookingEndDate] = useState<string>()
   const [isSectionOpen, setIsSectionOpen] = useState<Sections>({
@@ -75,6 +85,7 @@ const BookTable = ({}) => {
     pay: false,
     confirmation: false,
   })
+  const [startTimeout, setStartTimeout] = useState<boolean>(false)
   const [counterNoPersons, setCounterNoPersons] = useState<number>(1)
   const [selectedDate, setSelectedDate] = useState<MaterialUiPickersDate>()
   const [selectedTime, setSelectedTime] = useState<MaterialUiPickersDate>()
@@ -105,6 +116,14 @@ const BookTable = ({}) => {
       )
     }
   }, [menuItems])
+
+  useEffect(() => {
+    if (startTimeout) {
+      setTimeout(() => {
+        router.push('/reservations')
+      }, 5000)
+    }
+  }, [startTimeout])
 
   const handleOrderItemsChange = (itemId: number, amount: number) => {
     setOrderItems((prevState) => {
@@ -183,6 +202,47 @@ const BookTable = ({}) => {
       dbKey: 'nonalcoholic',
     },
   ]
+
+  const publishForm = async () => {
+    let responseReservation
+    let responseOrder
+
+    try {
+      responseReservation = await createReservation({
+        dateAndTime: `${moment(selectedDate).format('YYYY-MM-DD')}T${moment(
+          selectedTime
+        ).format('HH:MM')}:00.000Z`,
+        tableId: 2,
+        noPersons: counterNoPersons,
+      })
+
+      if (responseReservation.data?.createReservation.id) {
+        responseOrder = await createOrder({
+          reservationId: responseReservation.data?.createReservation.id,
+        })
+      }
+
+      if (responseOrder?.data?.createOrder.id && orderItems) {
+        const orderId = responseOrder.data.createOrder.id
+        const orderItemsInput: OrderItemInput[] = orderItems
+          .filter((item) => item.amount)
+          .map((item) => ({
+            orderId,
+            menuItemId: item.id,
+            price: item.price,
+            amount: Number(item.amount),
+          }))
+
+        await createOrderItems({
+          orderItems: orderItemsInput,
+        })
+        setStartTimeout(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -200,41 +260,7 @@ const BookTable = ({}) => {
             margin: auto;
           `}
         >
-          <Formik
-            initialValues={{}}
-            onSubmit={async () => {
-              let responseOrder
-              let responseOrderItem
-              const responseReservation = await createReservation({
-                dateAndTime: `${moment(selectedDate).format(
-                  'YYYY-MM-DD'
-                )}T${moment(selectedTime).format('HH:MM')}:00.000Z`,
-                tableId: 2,
-                noPersons: counterNoPersons,
-              })
-
-              if (responseReservation.data?.createReservation.id) {
-                responseOrder = await createOrder({
-                  reservationId: responseReservation.data?.createReservation.id,
-                })
-              }
-              if (responseOrder?.data?.createOrder.id && orderItems) {
-                const orderId = responseOrder.data.createOrder.id
-                const orderItemsInput: OrderItemInput[] = orderItems
-                  .filter((item) => item.amount)
-                  .map((item) => ({
-                    orderId,
-                    menuItemId: item.id,
-                    price: item.price,
-                    amount: Number(item.amount),
-                  }))
-
-                responseOrderItem = await createOrderItems({
-                  orderItems: orderItemsInput,
-                })
-              }
-            }}
-          >
+          <Formik initialValues={{}} onSubmit={() => publishForm()}>
             {({ isSubmitting }) => (
               <Form>
                 <Accordion
@@ -242,12 +268,17 @@ const BookTable = ({}) => {
                   isOpen={isSectionOpen.noPersons}
                   heading="Guests"
                 >
-                  <Counter
-                    minVal={1}
-                    maxVal={8}
-                    initialVal={1}
-                    executeOnChange={(e) => setCounterNoPersons(e)}
-                  />
+                  <div css={containerCentered}>
+                    <Text styledAs="bodyInterface">
+                      Select <b>number of guests</b>
+                    </Text>
+                    <Counter
+                      minVal={1}
+                      maxVal={8}
+                      initialVal={1}
+                      executeOnChange={(e) => setCounterNoPersons(e)}
+                    />
+                  </div>
                   <ButtonStack align="right">
                     <Button
                       type="button"
@@ -264,17 +295,22 @@ const BookTable = ({}) => {
                     isOpen={isSectionOpen.date}
                     heading="Date"
                   >
-                    <DatePicker
-                      autoOk
-                      variant="static"
-                      disablePast
-                      initialFocusedDate={bookingStartDate}
-                      minDate={bookingStartDate}
-                      maxDate={bookingEndDate}
-                      openTo="date"
-                      value={selectedDate}
-                      onChange={(d) => setSelectedDate(d)}
-                    />
+                    <div css={containerCentered}>
+                      <Text styledAs="bodyInterface">
+                        Select <b>date</b>
+                      </Text>
+                      <DatePicker
+                        autoOk
+                        variant="static"
+                        disablePast
+                        initialFocusedDate={bookingStartDate}
+                        minDate={bookingStartDate}
+                        maxDate={bookingEndDate}
+                        openTo="date"
+                        value={selectedDate}
+                        onChange={(d) => setSelectedDate(d)}
+                      />
+                    </div>
                     <ButtonStack align="right">
                       <Button
                         type="button"
@@ -283,7 +319,6 @@ const BookTable = ({}) => {
                       >
                         Go Back
                       </Button>
-
                       <Button
                         type="button"
                         onClick={() => handleChange('date', 'time')}
@@ -299,14 +334,19 @@ const BookTable = ({}) => {
                     isOpen={isSectionOpen.time}
                     heading="Time"
                   >
-                    <TimePicker
-                      autoOk
-                      variant="static"
-                      openTo="hours"
-                      initialFocusedDate={new Date().setHours(12, 0, 0, 0)}
-                      value={selectedTime}
-                      onChange={(t) => setSelectedTime(t)}
-                    />
+                    <div css={containerCentered}>
+                      <Text styledAs="bodyInterface">
+                        Select <b>time</b>
+                      </Text>
+                      <TimePicker
+                        autoOk
+                        variant="static"
+                        openTo="hours"
+                        initialFocusedDate={new Date().setHours(12, 0, 0, 0)}
+                        value={selectedTime}
+                        onChange={(t) => setSelectedTime(t)}
+                      />
+                    </div>
                     <ButtonStack align="right">
                       <Button
                         type="button"
@@ -325,6 +365,7 @@ const BookTable = ({}) => {
                     </ButtonStack>
                   </Accordion>
                 </MuiPickersUtilsProvider>
+
                 <Accordion disabled isOpen={isSectionOpen.menu} heading="Menu">
                   {menuSections.map((item, index) => (
                     <React.Fragment key={index}>
@@ -370,52 +411,69 @@ const BookTable = ({}) => {
                   isOpen={isSectionOpen.pay}
                   heading="Summary & Pay"
                 >
-                  <ListItem multiline divider>
-                    <ListTextGroup>
-                      <ListText styledAs="labelBold">Guests</ListText>
-                      <ListText styledAs="body">{counterNoPersons}</ListText>
-                    </ListTextGroup>
-                  </ListItem>
-                  <ListItem multiline divider>
-                    <ListTextGroup>
-                      <ListText styledAs="labelBold">Selected date</ListText>
-                      <ListText styledAs="body">
-                        {moment(selectedDate).format('DD-MM-YYYY')}
-                      </ListText>
-                    </ListTextGroup>
-                  </ListItem>
-                  <ListItem multiline divider>
-                    <ListTextGroup>
-                      <ListText styledAs="labelBold">Selected time</ListText>
-                      <ListText styledAs="body">
-                        {moment(selectedTime).format('HH:MM')}
-                      </ListText>
-                    </ListTextGroup>
-                  </ListItem>
-                  <ListItem>
-                    <ListTextGroup>
-                      <ListText styledAs="labelBold">Ordered items</ListText>
-                    </ListTextGroup>
-                  </ListItem>
-                  {orderItems
-                    ?.filter((item) => item.amount)
-                    .map((item) => (
-                      <ListItem divider key={item.id}>
+                  <div css={containerCentered}>
+                    <span
+                      css={css`
+                        width: 100%;
+                      `}
+                    >
+                      <ListItem multiline divider>
                         <ListTextGroup>
+                          <ListText styledAs="labelBold">Guests</ListText>
                           <ListText styledAs="body">
-                            <b>{item.name}</b> x {item.amount} ={' '}
-                            {item.amount && item.price * item.amount}DKK
+                            {counterNoPersons}
                           </ListText>
                         </ListTextGroup>
                       </ListItem>
-                    ))}
-                  <ListItem multiline divider>
-                    <ListTextGroup>
-                      <ListText styledAs="labelBold">Total</ListText>
-                      <ListText styledAs="labelBold">{totalItems} DKK</ListText>
-                    </ListTextGroup>
-                  </ListItem>
-
+                      <ListItem multiline divider>
+                        <ListTextGroup>
+                          <ListText styledAs="labelBold">
+                            Selected date
+                          </ListText>
+                          <ListText styledAs="body">
+                            {moment(selectedDate).format('DD-MM-YYYY')}
+                          </ListText>
+                        </ListTextGroup>
+                      </ListItem>
+                      <ListItem multiline divider>
+                        <ListTextGroup>
+                          <ListText styledAs="labelBold">
+                            Selected time
+                          </ListText>
+                          <ListText styledAs="body">
+                            {moment(selectedTime).format('HH:MM')}
+                          </ListText>
+                        </ListTextGroup>
+                      </ListItem>
+                      <ListItem>
+                        <ListTextGroup>
+                          <ListText styledAs="labelBold">
+                            Ordered items
+                          </ListText>
+                        </ListTextGroup>
+                      </ListItem>
+                      {orderItems
+                        ?.filter((item) => item.amount)
+                        .map((item) => (
+                          <ListItem divider key={item.id}>
+                            <ListTextGroup>
+                              <ListText styledAs="body">
+                                <b>{item.name}</b> x {item.amount} ={' '}
+                                {item.amount && item.price * item.amount}DKK
+                              </ListText>
+                            </ListTextGroup>
+                          </ListItem>
+                        ))}
+                      <ListItem multiline divider>
+                        <ListTextGroup>
+                          <ListText styledAs="labelBold">Total</ListText>
+                          <ListText styledAs="labelBold">
+                            {totalItems} DKK
+                          </ListText>
+                        </ListTextGroup>
+                      </ListItem>
+                    </span>
+                  </div>
                   <ButtonStack align="right">
                     <Button
                       type="button"
@@ -427,7 +485,9 @@ const BookTable = ({}) => {
                     <Button
                       type="submit"
                       submitting={isSubmitting}
-                      onClick={() => handleChange('pay', 'confirmation')}
+                      onClick={() => {
+                        handleChange('pay', 'confirmation')
+                      }}
                     >
                       Agree & PAY
                     </Button>
@@ -442,10 +502,10 @@ const BookTable = ({}) => {
             isOpen={isSectionOpen.confirmation}
             heading="Confirmation"
           >
-            <p>
-              when confirmation accordion is opened, after seconds, the user is
-              redirected to the main page. and he is notified with a counter.
-            </p>
+            <Text styledAs="smallHeadline">Your order has been placed.</Text>
+            <Text>
+              In just a few moments you will be redirected to the home page.
+            </Text>
           </Accordion>
         </Column>
       </Container>

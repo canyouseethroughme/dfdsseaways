@@ -15,7 +15,7 @@ export class OrderItemResolver {
 
   @Mutation(() => [OrderItem])
   async createOrderItems(
-    @Arg("orderItems", () => [OrderItem]) orderItems: OrderItem[] //// doesnt
+    @Arg("orderItems", () => [OrderItem]) orderItems: OrderItem[]
   ): Promise<OrderItem[]> {
     const orderCreations = orderItems.map(
       ({ orderId, menuItemId, amount, price }) =>
