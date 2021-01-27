@@ -1,6 +1,7 @@
 import { ThemeProvider, CSSReset } from '@chakra-ui/core'
 import { GlobalStyles } from '@dfds-ui/react-components'
 import { Provider, createClient } from 'urql'
+import '../index.css'
 
 import theme from '../theme'
 

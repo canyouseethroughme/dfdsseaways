@@ -1,0 +1,8 @@
+mutation CreateOrderItems($orderItems: [OrderItemInput!]!) {
+  createOrderItems(orderItems: $orderItems) {
+    orderId
+    menuItemId
+    price
+    amount
+  }
+}

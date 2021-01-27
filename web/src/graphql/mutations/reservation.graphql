@@ -1,0 +1,16 @@
+mutation CreateReservation(
+  $noPersons: Float!
+  $dateAndTime: DateTime!
+  $tableId: Float!
+) {
+  createReservation(
+    tableId: $tableId
+    noPersons: $noPersons
+    dateAndTime: $dateAndTime
+  ) {
+    id
+    dateAndTime
+    noPersons
+    tableId
+  }
+}

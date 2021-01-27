@@ -5,13 +5,18 @@ import { useRouter } from 'next/router'
 
 import { useLoginMutation } from '../generated/graphql'
 import { Text } from '@dfds-ui/typography'
-import { Column, Container, Card, CardContent } from '@dfds-ui/react-components'
+import {
+  Column,
+  Container,
+  Card,
+  CardContent,
+  Button,
+} from '@dfds-ui/react-components'
 import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
 
 import { PageLayout } from '../components/PageLayout'
 import { toErrorMap } from '../utils/toErrorMap'
 import InputField from '../components/InputField'
-import StyledButton from '../components/StyledButton'
 
 export const containerStyle = css`
   margin: 2rem auto;
@@ -20,7 +25,6 @@ export const containerStyle = css`
 const Index = ({}) => {
   const router = useRouter()
   const [, login] = useLoginMutation()
-
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -53,7 +57,7 @@ const Index = ({}) => {
                   })
                   if (response.data?.login.errors) {
                     setErrors(toErrorMap(response.data.login.errors))
-                  } else if (response.data.login.booking) {
+                  } else if (response.data?.login.booking) {
                     router.push('/reservations')
                   }
                 }}
@@ -66,14 +70,16 @@ const Index = ({}) => {
                         label="Booking No."
                         placeholder="Type here ..."
                       />
-                      <StyledButton
+                      <Button
                         type="submit"
-                        isLoading={isSubmitting}
-                        variantColor="orange"
-                        buttonSize="small"
+                        submitting={isSubmitting}
+                        css={css`
+                          margin-top: 32px;
+                          height: 38px;
+                        `}
                       >
                         Log In
-                      </StyledButton>
+                      </Button>
                     </FlexBox>
                   </Form>
                 )}

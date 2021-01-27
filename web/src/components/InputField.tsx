@@ -11,9 +11,10 @@ import { css } from '@emotion/core'
 type InputFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   label: string
   name: string
+  placeholder: string
 }
 
-const inputStyle = (error: string) => css`
+const inputStyle = (error?: string) => css`
   ${error
     ? css`
         margin-bottom: 0;
@@ -38,7 +39,7 @@ const InputField = ({ label, size: _, ...props }: InputFieldProps) => {
     <FormControl
       isInvalid={!!error}
       css={css`
-        width: 100%;
+        width: 90%;
       `}
     >
       <FormLabel htmlFor={field.name} css={labelStyle}>

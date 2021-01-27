@@ -101,15 +101,16 @@ export const menuItemSeeds = async () => {
       {
         category: "side_orders",
         itemType: "food",
-        name: "Truffle Fries w. fresh tarragon",
+        name: "Truffle Fries",
         description: "Danish gouda cheese & herbs",
         price: 50,
       },
       {
         category: "desert",
         itemType: "food",
-        name: "Classic creme brulee",
-        description: "w, passionfruit sorbet",
+        name: "Creme brulee",
+        description:
+          "Rich custard base topped with a layer of hardened caramelized sugar",
         price: 80,
       },
       {
