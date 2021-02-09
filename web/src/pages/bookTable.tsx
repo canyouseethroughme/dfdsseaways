@@ -9,9 +9,10 @@ import {
   useCreateOrderItemsMutation,
   OrderItemInput,
 } from '../generated/graphql'
+import { menuSections } from '../utils/constants'
+import { AccordionSections, OrderItem } from '../order'
 import { PageLayout } from '../components/PageLayout'
 import {
-  Label,
   Column,
   Container,
   Accordion,
@@ -22,6 +23,7 @@ import {
   ListText,
   ListTextGroup,
 } from '@dfds-ui/react-components'
+import { ArrowBack } from '@dfds-ui/icons/system'
 import { Text } from '@dfds-ui/typography'
 import { useRouter } from 'next/router'
 import { css, jsx } from '@emotion/core'
@@ -35,27 +37,6 @@ import DateFnsUtils from '@date-io/date-fns'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date'
 import moment from 'moment'
 import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
-
-interface Sections {
-  noPersons: boolean
-  date: boolean
-  time: boolean
-  menu: boolean
-  pay: boolean
-  confirmation: boolean
-}
-
-interface MenuSectionType {
-  header: string
-  dbKey: string
-}
-
-interface OrderItem {
-  id: number
-  amount?: number
-  price: number
-  name: string
-}
 
 const containerCentered = css`
   width: 100%;
@@ -73,11 +54,11 @@ const BookTable = ({}) => {
   const [menuItems] = useMenuItemsQuery()
   const [, createReservation] = useCreateReservationMutation()
   const [, createOrder] = useCreateOrderMutation()
-  const [asd, createOrderItems] = useCreateOrderItemsMutation()
-  console.log(asd)
+  const [, createOrderItems] = useCreateOrderItemsMutation()
+
   const [bookingStartDate, setBookingStartDate] = useState<string>()
   const [bookingEndDate, setBookingEndDate] = useState<string>()
-  const [isSectionOpen, setIsSectionOpen] = useState<Sections>({
+  const [isSectionOpen, setIsSectionOpen] = useState<AccordionSections>({
     noPersons: true,
     date: false,
     time: false,
@@ -137,7 +118,10 @@ const BookTable = ({}) => {
     })
   }
 
-  const handleChange = (key1: keyof Sections, key2: keyof Sections) => {
+  const handleChange = (
+    key1: keyof AccordionSections,
+    key2: keyof AccordionSections
+  ) => {
     setIsSectionOpen((prevState) => ({
       ...prevState,
       [key1]: !prevState[key1],
@@ -175,33 +159,6 @@ const BookTable = ({}) => {
           </ListItem>
         </React.Fragment>
       ))
-
-  const menuSections: MenuSectionType[] = [
-    {
-      header: 'Starters',
-      dbKey: 'starter',
-    },
-    {
-      header: 'Main Course',
-      dbKey: 'main_course',
-    },
-    {
-      header: 'Sides',
-      dbKey: 'side_orders',
-    },
-    {
-      header: 'Desert',
-      dbKey: 'desert',
-    },
-    {
-      header: 'Alcoholic beverages',
-      dbKey: 'alcoholic',
-    },
-    {
-      header: 'Nonalcoholic beverages',
-      dbKey: 'nonalcoholic',
-    },
-  ]
 
   const publishForm = async () => {
     let responseReservation
@@ -249,9 +206,26 @@ const BookTable = ({}) => {
       heroHeadline={`Book a table, ${meData.data?.me?.firstName}`}
       heroImg={'/waiterdfds.jpg'}
     >
-      <Label>
-        <span onClick={() => router.back()}>Go Back</span>
-      </Label>
+      <FlexBox justifySpaceBetween>
+        <Button
+          onClick={() => router.push('/reservations')}
+          icon={<ArrowBack />}
+          iconAlign="left"
+          size="small"
+          variation="text"
+        >
+          Go Back
+        </Button>
+        <Button
+          onClick={() => console.log('clicked')}
+          iconAlign="left"
+          size="small"
+          variation="text"
+        >
+          Logout
+        </Button>
+      </FlexBox>
+
       <Container fluid>
         <Column
           l={8}
@@ -441,7 +415,7 @@ const BookTable = ({}) => {
                             Selected time
                           </ListText>
                           <ListText styledAs="body">
-                            {moment(selectedTime).format('HH:MM')}
+                            {moment(selectedTime).format('HH:00')}
                           </ListText>
                         </ListTextGroup>
                       </ListItem>
