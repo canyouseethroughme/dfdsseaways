@@ -608,6 +608,11 @@
   resolved "https://registry.yarnpkg.com/@dfds-ui/icons/-/icons-0.8.38.tgz#789f7c8abfccd9400b5294c54c5545a55d2a94f3"
   integrity sha512-yZW+pAmoGTjGSNICTXhi8en3G4BK+VLVgf4Lx5b4wrDB1S2TVKSeBX9+c5P4n4dyQUESGgBwvg+JOrDVNJZ2uQ==
 
+"@dfds-ui/icons@^0.8.41":
+  version "0.8.41"
+  resolved "https://registry.yarnpkg.com/@dfds-ui/icons/-/icons-0.8.41.tgz#2cab9a00eae4bf539290fcf6870d206f5da0c59f"
+  integrity sha512-bk8igEfrJSSniO3VWiaq4uhXKnfTlBTISpDAMAEFOhdenXNn+nJlkbLsFUYAsoMoT0CCNJGFcb4bWOoQEBXLOg==
+
 "@dfds-ui/modal@^0.8.38":
   version "0.8.38"
   resolved "https://registry.yarnpkg.com/@dfds-ui/modal/-/modal-0.8.38.tgz#0f17fad704981160c4cc5b4d8d857ded03d2726e"

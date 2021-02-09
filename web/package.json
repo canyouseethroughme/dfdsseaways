@@ -12,6 +12,7 @@
     "@chakra-ui/core": "0.5.2",
     "@date-io/date-fns": "1.x",
     "@dfds-ui/forms": "^0.8.38",
+    "@dfds-ui/icons": "^0.8.41",
     "@dfds-ui/modal": "^0.8.38",
     "@dfds-ui/react-components": "0.8.38",
     "@dfds-ui/typography": "^0.8.41",

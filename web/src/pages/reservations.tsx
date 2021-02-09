@@ -1,12 +1,14 @@
+/** @jsx jsx */
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 
-import { css } from '@emotion/core'
+import { css, jsx } from '@emotion/core'
 import {
   useMeQuery,
   useMenuItemsQuery,
   useReservationsQuery,
 } from '../generated/graphql'
+import { menuSections } from '../utils/constants'
 
 import { PageLayout } from '../components/PageLayout'
 import {
@@ -14,31 +16,24 @@ import {
   Container,
   Card,
   Button,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableHeaderCell,
-  TableDataCell,
   ListItem,
   ListText,
   ListTextGroup,
+  ButtonStack,
+  ListIcon,
 } from '@dfds-ui/react-components'
 import { Text } from '@dfds-ui/typography'
 import { Modal } from '@dfds-ui/modal'
+import { ChevronRight } from '@dfds-ui/icons/system'
 import { format } from 'date-fns'
 import FlexBox from '@dfds-ui/react-components/flexbox/FlexBox'
-
-interface MenuSectionType {
-  header: string
-  dbKey: string
-}
 
 const Reservations = ({}) => {
   const [meData] = useMeQuery()
   const [menuItemsData] = useMenuItemsQuery()
   const [reservationsData] = useReservationsQuery()
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const router = useRouter()
 
   const filterMenuItems = menuItemsData.data?.menuItems
@@ -63,56 +58,45 @@ const Reservations = ({}) => {
         </React.Fragment>
       ))
 
-  const menuSections: MenuSectionType[] = [
-    {
-      header: 'Starters',
-      dbKey: 'starter',
-    },
-    {
-      header: 'Main Course',
-      dbKey: 'main_course',
-    },
-    {
-      header: 'Sides',
-      dbKey: 'side_orders',
-    },
-    {
-      header: 'Desert',
-      dbKey: 'desert',
-    },
-    {
-      header: 'Alcoholic beverages',
-      dbKey: 'alcoholic',
-    },
-    {
-      header: 'Nonalcoholic beverages',
-      dbKey: 'nonalcoholic',
-    },
-  ]
-
   return (
     <PageLayout
       heroTitle="DFDS"
       heroHeadline={`Welcome ${meData.data?.me?.firstName}`}
       heroImg={'/kidfds.jpg'}
     >
+      <FlexBox justifyFlexEnd>
+        <Button
+          onClick={() => console.log('clicked')}
+          iconAlign="left"
+          size="small"
+          variation="text"
+        >
+          Logout
+        </Button>
+      </FlexBox>
       <Container fluid>
         <Column
           l={5}
           m={12}
           css={css`
-            margin: auto;
+            margin: 5% auto;
           `}
         >
           <Card size="m" variant="fill">
-            <Button onClick={() => router.push('/bookTable')}>
-              BOOK A TABLE
-            </Button>
-            <Button onClick={() => setOpenModal(true)}>VIEW MENU</Button>
+            <ButtonStack orientation="vertical">
+              <Button
+                onClick={() => (
+                  setIsSubmitting(true), router.push('/bookTable')
+                )}
+                submitting={isSubmitting}
+              >
+                BOOK A TABLE
+              </Button>
+              <Button variation="secondary" onClick={() => setOpenModal(true)}>
+                VIEW MENU
+              </Button>
+            </ButtonStack>
             <Modal
-              css={css`
-                z-index: 1000;
-              `}
               heading="Menu"
               isOpen={openModal}
               shouldCloseOnEsc={true}
@@ -138,33 +122,44 @@ const Reservations = ({}) => {
         </Column>
         <Column l={5} m={12}>
           <Card size="m" variant="fill">
-            <Table isInteractive>
-              <TableHead>
-                <TableRow>
-                  <TableHeaderCell align="center">Date & Time</TableHeaderCell>
-                  <TableHeaderCell>No. of persons</TableHeaderCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+            {reservationsData.data?.reservations.length ? (
+              <>
+                <Text styledAs="smallHeadline">Reservations</Text>
                 {reservationsData.data?.reservations.map(
-                  (reservation, index) => {
-                    return (
-                      <TableRow key={index}>
-                        <TableDataCell align="center">
+                  (reservation, index) => (
+                    <ListItem multiline clickable divider key={index}>
+                      <ListTextGroup>
+                        <ListText styledAs="labelBold">
                           {format(
                             new Date(parseInt(reservation.dateAndTime)),
-                            'dd/MM/yyyy @ HH:mm'
+                            'dd/MM/yyyy'
                           )}
-                        </TableDataCell>
-                        <TableDataCell align="center">
-                          {reservation.noPersons}
-                        </TableDataCell>
-                      </TableRow>
-                    )
-                  }
+                        </ListText>
+                        <ListText styledAs="body">
+                          Guests: {reservation.noPersons}
+                        </ListText>
+                        <ListText
+                          styledAs="smallHeadline"
+                          css={css`
+                            color: #49a2df;
+                          `}
+                        >
+                          {format(
+                            new Date(parseInt(reservation.dateAndTime)),
+                            'HH:00'
+                          )}
+                        </ListText>
+                      </ListTextGroup>
+                      <ListIcon size="xl" icon={ChevronRight} />
+                    </ListItem>
+                  )
                 )}
-              </TableBody>
-            </Table>
+              </>
+            ) : (
+              <Text styledAs="smallHeadline">
+                You don't have any reservations yet.
+              </Text>
+            )}
           </Card>
         </Column>
       </Container>

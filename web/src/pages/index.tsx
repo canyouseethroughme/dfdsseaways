@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { css } from '@emotion/core'
 import { Form, Formik } from 'formik'
 import { useRouter } from 'next/router'
@@ -25,6 +25,8 @@ export const containerStyle = css`
 const Index = ({}) => {
   const router = useRouter()
   const [, login] = useLoginMutation()
+  const [submitting, setSubmitting] = useState<boolean>(false)
+
   return (
     <PageLayout
       heroTitle="DFDS"
@@ -72,7 +74,8 @@ const Index = ({}) => {
                       />
                       <Button
                         type="submit"
-                        submitting={isSubmitting}
+                        onClick={() => setSubmitting(true)}
+                        submitting={submitting && isSubmitting}
                         css={css`
                           margin-top: 32px;
                           height: 38px;
