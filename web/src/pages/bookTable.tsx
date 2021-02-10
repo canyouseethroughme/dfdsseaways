@@ -7,6 +7,7 @@ import {
   useCreateReservationMutation,
   useCreateOrderMutation,
   useCreateOrderItemsMutation,
+  useLogoutMutation,
   OrderItemInput,
 } from '../generated/graphql'
 import { menuSections } from '../utils/constants'
@@ -55,6 +56,7 @@ const BookTable = ({}) => {
   const [, createReservation] = useCreateReservationMutation()
   const [, createOrder] = useCreateOrderMutation()
   const [, createOrderItems] = useCreateOrderItemsMutation()
+  const [, logout] = useLogoutMutation()
 
   const [bookingStartDate, setBookingStartDate] = useState<string>()
   const [bookingEndDate, setBookingEndDate] = useState<string>()
@@ -217,7 +219,9 @@ const BookTable = ({}) => {
           Go Back
         </Button>
         <Button
-          onClick={() => console.log('clicked')}
+          onClick={() => {
+            logout(), router.push('/')
+          }}
           iconAlign="left"
           size="small"
           variation="text"

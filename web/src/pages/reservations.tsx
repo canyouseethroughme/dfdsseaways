@@ -7,6 +7,7 @@ import {
   useMeQuery,
   useMenuItemsQuery,
   useReservationsQuery,
+  useLogoutMutation,
 } from '../generated/graphql'
 import { menuSections } from '../utils/constants'
 
@@ -32,6 +33,7 @@ const Reservations = ({}) => {
   const [meData] = useMeQuery()
   const [menuItemsData] = useMenuItemsQuery()
   const [reservationsData] = useReservationsQuery()
+  const [, logout] = useLogoutMutation()
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
   const router = useRouter()
@@ -66,7 +68,9 @@ const Reservations = ({}) => {
     >
       <FlexBox justifyFlexEnd>
         <Button
-          onClick={() => console.log('clicked')}
+          onClick={() => {
+            logout(), router.push('/')
+          }}
           iconAlign="left"
           size="small"
           variation="text"
