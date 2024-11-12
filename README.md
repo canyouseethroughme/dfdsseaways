@@ -1,6 +1,6 @@
 # dfdsseaways
 
-## Restaurant - Food and Table Booking App
+## Restaurant - Food and Table Booking Fullstack App
 
 Frontend: NextJS w TS, GraphQL, Formik, ChakraUI, DFDS UI Components, URQL
 
